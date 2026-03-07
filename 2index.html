@@ -17,7 +17,6 @@
 
         #matrixCanvas { position: fixed; top: 0; left: 0; z-index: 1; }
 
-        /* Үстіңгі құттықтау мәтіні мен оның ақ фоны */
         #wish-container {
             position: fixed;
             top: 5%;
@@ -36,7 +35,7 @@
 
         #wish-text {
             color: #fff;
-            font-size: clamp(10px, 3.5vw, 16px); /* десктопқа */
+            font-size: clamp(10px, 3.5vw, 16px);
             text-align: center;
             width: 100%;
             text-shadow: 0 0 10px #ff69b4;
@@ -44,19 +43,14 @@
             transition: opacity 0.5s ease;
         }
 
-        @media (max-width: 600px) {
-            #wish-container { top: 8%; }
-            #wish-text { font-size: clamp(8px, 3vw, 12px); } /* мобильді шрифт */
-            #book-container { transform: translate(-48%, -50%) scale(0.55); }
-        }
-
         #overlay {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             color: #fff;
-            font-size: clamp(20px, 8vw, 50px);
+            font-size: clamp(18px, 6vw, 40px); /* кішірейтілген мәтін */
             z-index: 10;
+            text-align: center;
             text-shadow: 0 0 15px #ff69b4;
         }
 
@@ -68,7 +62,6 @@
             z-index: 0;
         }
 
-        /* Альбом контейнері */
         #book-container {
             position: fixed;
             top: 60%;
@@ -130,6 +123,16 @@
         @keyframes twinkle {
             0%, 100% { opacity: 0.3; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @media (max-width: 600px) {
+            #wish-container { top: 8%; }
+            #wish-text { font-size: clamp(8px, 3vw, 12px); }
+            #book-container { 
+                top: 55%; 
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.55); /* мобильде орталау */
+            }
         }
     </style>
 </head>
@@ -209,7 +212,7 @@
         }
 
         let matrixInterval = setInterval(drawMatrix, 40);
-        const sequence = ["3", "2", "1", "Сізді мерекеңізбен құттықтаймын!"];
+        const sequence = ["3", "2", "1", "Сізді мерекеңізбен құттықтаймын Акниет әпке"];
         let seqIndex = 0;
 
         function runSequence() {
@@ -218,7 +221,7 @@
                 overlay.style.opacity = 0;
                 setTimeout(() => overlay.style.opacity = 1, 100);
                 seqIndex++;
-                setTimeout(runSequence, 1000); // әрбір элемент 1 секундқа көрсетіледі
+                setTimeout(runSequence, 1000);
             } else {
                 startSpacePhase();
             }
