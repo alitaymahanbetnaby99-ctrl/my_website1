@@ -2,263 +2,231 @@
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Сіз үшін</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finish Academy Pro</title>
     <style>
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Press Start 2P', cursive;
-            touch-action: manipulation;
+        :root {
+            --primary: #1cb0f6; --dark: #1899d6; --bg: #f7f7f7;
+            --white: #ffffff; --text: #4b4b4b; --gold: #ffc800;
+            --green: #58cc02; --red: #ff4b4b; --purple: #ce82ff;
         }
 
-        #matrixCanvas { position: fixed; top: 0; left: 0; z-index: 1; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+        .page { display: none; min-height: 100vh; flex-direction: column; padding-bottom: 90px; }
+        .active { display: flex; }
 
-        #wish-container {
-            position: fixed;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            width: 90%;
-            max-width: 600px;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 15px 10px;
-            border-radius: 15px;
-            display: none;
-            backdrop-filter: blur(5px);
-        }
+        /* HEADER */
+        .header { background: white; padding: 15px 20px; border-bottom: 2px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .stat { display: flex; align-items: center; gap: 8px; font-weight: bold; }
 
-        #wish-text {
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            text-shadow: 0 0 10px #ff69b4;
-            line-height: 1.6;
-        }
+        /* CARDS */
+        .content { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .card { background: white; border: 2px solid #e5e5e5; border-bottom: 5px solid #e5e5e5; border-radius: 20px; padding: 15px; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; gap: 15px; }
+        .card:active { transform: translateY(2px); border-bottom-width: 3px; }
 
-        #overlay {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 24px;
-            z-index: 10;
-            text-align: center;
-            text-shadow: 0 0 15px #ff69b4;
-            width: 90%;
-        }
+        /* SHOP & PROFILE */
+        .shop-item { background: white; border: 2px solid #e5e5e5; border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .buy-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .profile-hero { text-align: center; padding: 30px; background: white; border-bottom: 2px solid #e5e5e5; }
+        .avatar-big { width: 80px; height: 80px; background: var(--purple); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold; }
 
-        #starfield {
-            position: fixed;
-            width: 100%; height: 100%;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-            display: none;
-            z-index: 0;
-        }
+        /* NAVBAR */
+        .navbar { position: fixed; bottom: 0; width: 100%; background: white; border-top: 2px solid #e5e5e5; display: flex; justify-content: space-around; padding: 12px 0; }
+        .nav-btn { border: none; background: none; color: #afafaf; font-weight: bold; cursor: pointer; font-size: 11px; display: flex; flex-direction: column; align-items: center; }
+        .nav-btn.active-nav { color: var(--primary); }
 
-        /* КІТАПТЫҢ ОРНЫ: ТЕК ОҢ ЖАҚТА ЖӘНЕ ҮЛКЕН */
-        #book-container {
-            position: fixed !important;
-            top: 55% !important; /* Сәл төменірек түсірілді */
-            left: 95% !important; /* Барынша оңға, қызыл жақтауға */
-            /* scale(0.68) - тағы да үлкейтілді */
-            transform: translate(-100%, -50%) scale(0.68) !important; 
-            display: none;
-            z-index: 5;
-            perspective: 2000px;
-            /* Діріл болмауы үшін анимацияны тек параққа қалдырдық */
-        }
-
-        .book {
-            width: 300px;
-            height: 420px;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
-        .page {
-            width: 100%; height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            transform-origin: left center;
-            transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .front, .back {
-            position: absolute;
-            width: 100%; height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 2px 10px 10px 2px;
-            overflow: hidden;
-            background: #222;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .back { transform: rotateY(180deg); }
-
-        .page img { width: 100%; height: 100%; object-fit: cover; }
-
-        .flipped { transform: rotateY(-155deg); } 
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* ТЕЛЕФОН ҮШІН (ҚЫЗЫЛ ЖАҚТАУ ТҰРҒАН ЖЕРГЕ) */
-        @media (max-width: 600px) {
-            #book-container { 
-                left: 98% !important; /* Телефонда оң жақ шетке нық бекіту */
-                /* scale(0.6) - телефонда да үлкейтілді */
-                transform: translate(-100%, -50%) scale(0.6) !important; 
-            }
-        }
+        /* QUIZ */
+        .opt { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e5e5e5; border-bottom: 4px solid #e5e5e5; border-radius: 15px; background: white; font-weight: bold; cursor: pointer; text-align: left; }
+        .opt.selected { background: #ddf4ff; border-color: var(--primary); }
+        #feedback { position: fixed; bottom: -200px; left: 0; width: 100%; padding: 25px; transition: 0.3s; z-index: 200; display: flex; justify-content: center; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <canvas id="matrixCanvas"></canvas>
-    <div id="starfield"></div>
-    <div id="overlay"></div>
-
-    <div id="wish-container">
-        <div id="wish-text">Сізді келіп жеткен мерекеңізбен шын жүректен құттықтаймын!</div>
-    </div>
-
-    <div id="book-container">
-        <div class="book">
-            <div class="page" style="z-index: 1;">
-                <div class="front"><img src="ani10.jfif"></div>
-            </div>
-            <div class="page" id="p5" onclick="flipPage(this, 4)" style="z-index: 2;">
-                <div class="front"><img src="ani2.jfif"></div>
-                <div class="back"><img src="ani9.jfif"></div>
-            </div>
-            <div class="page" id="p4" onclick="flipPage(this, 3)" style="z-index: 3;">
-                <div class="front"><img src="ani8.jfif"></div>
-                <div class="back"><img src="ani7.jfif"></div>
-            </div>
-            <div class="page" id="p3" onclick="flipPage(this, 2)" style="z-index: 4;">
-                <div class="front"><img src="ani6.jfif"></div>
-                <div class="back"><img src="ani5.jfif"></div>
-            </div>
-            <div class="page" id="p2" onclick="flipPage(this, 1)" style="z-index: 5;">
-                <div class="front"><img src="ani4.jfif"></div>
-                <div class="back"><img src="ani3.jfif"></div>
-            </div>
-            <div class="page" id="p1" onclick="flipPage(this, 0)" style="z-index: 6;">
-                <div class="front"><img src="8march1.jpg"></div>
-                <div class="back"><img src="ani1.jfif"></div>
-            </div>
+    <div id="login-page" class="page active" style="justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 25px; text-align: center; width: 80%; max-width: 350px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+            <h1 style="color: var(--primary)">Finish Academy</h1>
+            <input type="text" id="u-input" placeholder="Атыңды жаз..." style="width:100%; padding:15px; margin:20px 0; border-radius:15px; border:2px solid #eee;">
+            <button onclick="start()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:bold; cursor:pointer; border-bottom:5px solid var(--dark);">БАСТАУ</button>
         </div>
     </div>
 
+    <div id="home-page" class="page">
+        <div class="header">
+            <div class="stat" style="color: var(--gold)">🔥 <span id="h-streak">1</span></div>
+            <div class="stat" style="color: var(--primary)">💎 <span id="h-xp">0</span></div>
+            <div class="stat" style="color: var(--purple)">🏆 <span id="h-rank">Новичок</span></div>
+        </div>
+        <div class="content">
+            <h3>ҰБТ Тақырыптары</h3>
+            <div class="card" onclick="launchQuiz('num')">🔢 <div><b>Санау жүйелері</b><br><small>20 сұрақ • +200 XP</small></div></div>
+            <div class="card" onclick="launchQuiz('logic')">🧠 <div><b>Логика</b><br><small>20 сұрақ • +200 XP</small></div></div>
+            <div class="card" onclick="launchQuiz('py')">🐍 <div><b>Python</b><br><small>20 сұрақ • +200 XP</small></div></div>
+            <div class="card" onclick="launchQuiz('web')">🎨 <div><b>HTML/CSS/JS</b><br><small>20 сұрақ • +200 XP</small></div></div>
+            <div class="card" onclick="launchQuiz('db')">🗄️ <div><b>Деректер қоры (SQL)</b><br><small>20 сұрақ • +200 XP</small></div></div>
+        </div>
+    </div>
+
+    <div id="shop-page" class="page">
+        <div class="header"><h2>Дүкен</h2> <div class="stat" style="color: var(--primary)">💎 <span id="s-xp">0</span></div></div>
+        <div class="content">
+            <div class="shop-item"><div><b>XP Бустер</b><br><small>Ұпайды 2 еселейді</small></div> <button class="buy-btn" onclick="buy(500)">500 💎</button></div>
+            <div class="shop-item"><div><b>Қатеден қорғау</b><br><small>Бір қатені кешіреді</small></div> <button class="buy-btn" onclick="buy(300)">300 💎</button></div>
+            <div class="shop-item"><div><b>Алтын Скин</b><br><small>Профильді алтын қылады</small></div> <button class="buy-btn" onclick="buy(1000)">1000 💎</button></div>
+        </div>
+    </div>
+
+    <div id="profile-page" class="page">
+        <div class="profile-hero">
+            <div class="avatar-big" id="p-avatar">U</div>
+            <h2 id="p-name">User</h2>
+            <div style="color: var(--purple); font-weight: bold; border: 2px solid var(--purple); display: inline-block; padding: 5px 15px; border-radius: 20px;" id="p-rank">Новичок</div>
+        </div>
+        <div class="content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="card" style="flex-direction: column; text-align: center;"><b>💎 XP</b><span id="p-xp">0</span></div>
+            <div class="card" style="flex-direction: column; text-align: center;"><b>🔥 Күн</b><span id="p-streak">1</span></div>
+        </div>
+    </div>
+
+    <div id="quiz-page" class="page">
+        <div class="header">
+            <button onclick="nav('home-page')" style="border:none; background:none; font-size:24px;">✕</button>
+            <div style="flex-grow:1; height:12px; background:#e5e5e5; margin:0 15px; border-radius:10px; overflow:hidden;">
+                <div id="fill" style="width:0%; height:100%; background:var(--primary); transition:0.3s;"></div>
+            </div>
+            <span id="q-count">1/20</span>
+        </div>
+        <div class="content" style="text-align:center;">
+            <h2 id="q-text">Сұрақ?</h2>
+            <div id="options"></div>
+            <button id="check-btn" onclick="check()" style="width:100%; padding:18px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:bold; margin-top:30px; border-bottom:5px solid var(--dark);" disabled>ТЕКСЕРУ</button>
+        </div>
+    </div>
+
+    <div id="feedback">
+        <div style="width:100%; max-width:500px; display:flex; justify-content:space-between; align-items:center; color:white;">
+            <h2 id="fb-msg">Керемет!</h2>
+            <button onclick="next()" id="fb-btn" style="padding:12px 25px; border-radius:12px; border:none; font-weight:bold; cursor:pointer; background:white;">ЖАЛҒАСТЫРУ</button>
+        </div>
+    </div>
+
+    <nav class="navbar" id="nav" style="display:none;">
+        <button class="nav-btn active-nav" onclick="nav('home-page', this)"><span>🏠</span>ҮЙ</button>
+        <button class="nav-btn" onclick="nav('shop-page', this)"><span>🛒</span>ДҮКЕН</button>
+        <button class="nav-btn" onclick="nav('profile-page', this)"><span>👤</span>ПРОФИЛЬ</button>
+    </nav>
+
     <script>
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-        const overlay = document.getElementById('overlay');
-        const wishContainer = document.getElementById('wish-container');
-        const wishText = document.getElementById('wish-text');
-        const starfield = document.getElementById('starfield');
-        const bookContainer = document.getElementById('book-container');
+        const levels = {
+            num: [{q: "1010 екілік жүйеде?", a: ["8", "10", "12"], c: 1}, {q: "F он алтылық жүйеде?", a: ["10", "15", "16"], c: 1}],
+            py: [{q: "Тізім қалай жасалады?", a: ["[]", "{}", "()"], c: 0}, {q: "Шығару функциясы?", a: ["print", "input", "out"], c: 0}],
+            web: [{q: "Сайт қаңқасы?", a: ["CSS", "HTML", "JS"], c: 1}],
+            logic: [{q: "Конъюнкция деген не?", a: ["Және", "Немесе", "Емес"], c: 0}],
+            db: [{q: "SQL - бұл...", a: ["Тіл", "База", "Сервер"], c: 0}]
+        };
 
-        const wishes = [
-            "Бүгінгі күн сізге тек күлкі сыйласын! ✨",
-            "Сіз әлемдегі ең сұлу жансыз! 🌸",
-            "Жүрегіңіз мәңгі бақытқа толсын! 💖",
-            "Әрбір сәтіңіз сиқырлы болсын! 🌟",
-            "Арман-мақсаттарыңызға жете беріңіз! 🚀",
-            "Бақытты болыңыз!! ❤️"
-        ];
+        // Сұрақтарды 20-ға дейін автоматты толтыру
+        Object.keys(levels).forEach(k => {
+            while(levels[k].length < 20) levels[k].push({q: `${k} бойынша сұрақ #${levels[k].length+1}`, a: ["Жауап 1", "Жауап 2", "Жауап 3"], c: 0});
+        });
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+        let user = { name: "", xp: 0, streak: 1, rank: "Новичок", selected: null };
+        let activeQ = [];
+        let idx = 0;
 
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#ff69b4"; 
-            ctx.font = fontSize + "px monospace";
-            for (let i = 0; i < drops.length; i++) {
-                const text = Math.floor(Math.random() * 10);
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
+        function start() {
+            const val = document.getElementById('u-input').value;
+            if(!val) return;
+            user.name = val;
+            document.getElementById('p-name').innerText = val;
+            document.getElementById('p-avatar').innerText = val[0].toUpperCase();
+            document.getElementById('nav').style.display = 'flex';
+            nav('home-page');
+        }
+
+        function nav(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(btn) {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+                btn.classList.add('active-nav');
             }
         }
 
-        let matrixInterval = setInterval(drawMatrix, 40);
-        const sequence = ["3", "2", "1", "Сізді мерекеңізбен құттықтаймын Акниет әпке"];
-        let seqIndex = 0;
+        function launchQuiz(key) {
+            activeQ = levels[key];
+            idx = 0;
+            nav('quiz-page');
+            loadQ();
+        }
 
-        function runSequence() {
-            if (seqIndex < sequence.length) {
-                overlay.innerText = sequence[seqIndex];
-                overlay.style.opacity = 0;
-                setTimeout(() => overlay.style.opacity = 1, 100);
-                seqIndex++;
-                setTimeout(runSequence, 1500);
+        function loadQ() {
+            const q = activeQ[idx];
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('q-count').innerText = `${idx+1}/20`;
+            const box = document.getElementById('options');
+            box.innerHTML = '';
+            user.selected = null;
+            document.getElementById('check-btn').disabled = true;
+            document.getElementById('feedback').style.bottom = "-200px";
+
+            q.a.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'opt';
+                b.innerText = opt;
+                b.onclick = () => {
+                    document.querySelectorAll('.opt').forEach(el => el.classList.remove('selected'));
+                    b.classList.add('selected');
+                    user.selected = i;
+                    document.getElementById('check-btn').disabled = false;
+                };
+                box.appendChild(b);
+            });
+            document.getElementById('fill').style.width = (idx/20)*100 + "%";
+        }
+
+        function check() {
+            const isCorrect = user.selected === activeQ[idx].c;
+            const fb = document.getElementById('feedback');
+            fb.style.bottom = "0";
+            if(isCorrect) {
+                user.xp += 10;
+                fb.style.background = "var(--green)";
+                document.getElementById('fb-msg').innerText = "ДҰРЫС! +10 XP";
             } else {
-                startSpacePhase();
+                fb.style.background = "var(--red)";
+                document.getElementById('fb-msg').innerText = "ҚАТЕ! Дұрысы: " + activeQ[idx].a[activeQ[idx].c];
             }
+            updateStats();
         }
 
-        function startSpacePhase() {
-            clearInterval(matrixInterval);
-            canvas.style.display = 'none';
-            starfield.style.display = 'block';
-            bookContainer.style.display = 'block';
-            wishContainer.style.display = 'block';
-            createTwinklingStars();
+        function next() {
+            idx++;
+            if(idx < 20) loadQ(); else nav('home-page');
         }
 
-        function flipPage(element, index) {
-            const isFlipped = element.classList.toggle('flipped');
-            if (isFlipped) {
-                setTimeout(() => { element.style.zIndex = index; }, 500);
-            } else {
-                element.style.zIndex = 6 - index;
-            }
-            wishText.style.opacity = 0;
-            setTimeout(() => {
-                wishText.innerText = wishes[index + 1] || wishes[wishes.length - 1];
-                wishText.style.opacity = 1;
-            }, 300);
+        function buy(cost) {
+            if(user.xp >= cost) {
+                user.xp -= cost;
+                alert("Сатып алынды!");
+                updateStats();
+            } else alert("XP жетпейді!");
         }
 
-        function createTwinklingStars() {
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.width = '2px';
-                star.style.height = '2px';
-                star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
-                starfield.appendChild(star);
-            }
-        }
+        function updateStats() {
+            if(user.xp > 200) user.rank = "Оқушы";
+            if(user.xp > 500) user.rank = "Программист";
+            if(user.xp > 1000) user.rank = "Алтын Хакер";
 
-        setTimeout(runSequence, 500);
+            const ids = ['h-xp', 's-xp', 'p-xp', 'q-score', 'h-rank', 'p-rank'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    if(id.includes('xp')) el.innerText = user.xp;
+                    else el.innerText = user.rank;
+                }
+            });
+        }
     </script>
 </body>
 </html>
