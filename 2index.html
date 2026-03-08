@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cіз үшін</title>
+    <title>Сіз үшін</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -48,10 +48,11 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             color: #fff;
-            font-size: clamp(18px, 6vw, 40px); /* кішірейтілген мәтін */
+            font-size: clamp(18px, 6vw, 40px);
             z-index: 10;
             text-align: center;
             text-shadow: 0 0 15px #ff69b4;
+            width: 90%;
         }
 
         #starfield {
@@ -62,11 +63,12 @@
             z-index: 0;
         }
 
+        /* КІТАПТЫ ОРТАҒА КЕЛТІРУ */
         #book-container {
             position: fixed;
-            top: 60%;
-            left: 70%;
-            transform: translate(-20%, -50%) scale(0.7);
+            top: 55%; /* Экранның ортасына жақын */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85); /* Бастапқы масштабы */
             display: none;
             z-index: 5;
             perspective: 2000px;
@@ -100,6 +102,7 @@
             border-radius: 2px 10px 10px 2px;
             overflow: hidden;
             background: #222;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .back { transform: rotateY(180deg); }
@@ -111,7 +114,7 @@
             pointer-events: none;
         }
 
-        .flipped { transform: rotateY(-170deg); }
+        .flipped { transform: rotateY(-160deg); } /* Ашылғанда ортада жақсы көрінуі үшін бұрышы азайтылды */
 
         .star {
             position: absolute;
@@ -125,13 +128,14 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
+        /* МОБИЛЬДІ ҚҰРЫЛҒЫЛАРҒА АРНАЛҒАН ЖӨНДЕУ */
         @media (max-width: 600px) {
-            #wish-container { top: 8%; }
-            #wish-text { font-size: clamp(8px, 3vw, 12px); }
+            #wish-container { top: 10%; }
+            #wish-text { font-size: 12px; }
             #book-container { 
                 top: 55%; 
                 left: 50%;
-                transform: translate(-50%, -50%) scale(0.55); /* мобильде орталау */
+                transform: translate(-50%, -50%) scale(0.65); /* Телефонда сыюы үшін кішірейтілді */
             }
         }
     </style>
@@ -221,7 +225,7 @@
                 overlay.style.opacity = 0;
                 setTimeout(() => overlay.style.opacity = 1, 100);
                 seqIndex++;
-                setTimeout(runSequence, 1000);
+                setTimeout(runSequence, 1500); // Сәл ұзағырақ көрсету үшін
             } else {
                 startSpacePhase();
             }
@@ -229,7 +233,7 @@
 
         function startSpacePhase() {
             clearInterval(matrixInterval);
-            canvas.style.transition = "opacity 1.5s";
+            canvas.style.transition = "opacity 1s";
             canvas.style.opacity = "0";
             setTimeout(() => {
                 overlay.style.display = "none";
@@ -257,12 +261,12 @@
         }
 
         function createTwinklingStars() {
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                const size = Math.random() * 2;
+                const size = Math.random() * 2 + 1;
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
                 star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
@@ -271,8 +275,12 @@
         }
 
         setTimeout(runSequence, 500);
+
+        // Экран өлшемі өзгергенде канвасты реттеу
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
-
-
