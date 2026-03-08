@@ -63,15 +63,16 @@
             z-index: 0;
         }
 
-        /* КІТАПТЫ ОРТАҒА КЕЛТІРУ */
+        /* КІТАПТЫҢ ОРНАЛАСУЫ (ОҢ ЖАҚҚА ЫҒЫСТЫРУ) */
         #book-container {
-            position: fixed;
-            top: 55%; /* Экранның ортасына жақын */
-            left: 60%;
-            transform: translate(-20%, -50%) scale(0.65); /* Бастапқы масштабы */
+            position: fixed !important;
+            top: 55% !important;
+            left: 75% !important; /* Оңға жылжыту */
+            transform: translate(-85%, -50%) scale(0.65) !important; 
             display: none;
             z-index: 5;
             perspective: 2000px;
+            transition: all 1.2s ease-in-out; /* Парақ ашылғанда жылжу анимациясы */
         }
 
         .book {
@@ -114,7 +115,14 @@
             pointer-events: none;
         }
 
-        .flipped { transform: rotateY(-160deg); } /* Ашылғанда ортада жақсы көрінуі үшін бұрышы азайтылды */
+        /* АШЫЛҒАНДАҒЫ БҰРЫШ */
+        .flipped { transform: rotateY(-160deg); } 
+
+        /* КІТАП АШЫЛҒАНДА ОРТАҒА ҚАРАЙ ЖЫЛЖУ (ПАРАҚТАР СЫЮЫ ҮШІН) */
+        #book-container.is-open {
+            left: 55% !important;
+            transform: translate(-50%, -50%) scale(0.65) !important;
+        }
 
         .star {
             position: absolute;
@@ -128,14 +136,18 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* МОБИЛЬДІ ҚҰРЫЛҒЫЛАРҒА АРНАЛҒАН ЖӨНДЕУ */
+        /* МОБИЛЬДІ ТЕЛЕФОН ҮШІН ЖӨНДЕУ */
         @media (max-width: 600px) {
             #wish-container { top: 10%; }
-            #wish-text { font-size: 12px; }
+            #wish-text { font-size: 11px; }
             #book-container { 
-                top: 55%; 
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.55); /* Телефонда сыюы үшін кішірейтілді */
+                top: 55% !important;
+                left: 80% !important; /* Телефонда оң жаққа жақынырақ */
+                transform: translate(-95%, -50%) scale(0.48) !important; 
+            }
+            #book-container.is-open {
+                left: 50% !important; /* Ашылғанда ортаға келеді */
+                transform: translate(-50%, -50%) scale(0.48) !important;
             }
         }
     </style>
@@ -225,7 +237,7 @@
                 overlay.style.opacity = 0;
                 setTimeout(() => overlay.style.opacity = 1, 100);
                 seqIndex++;
-                setTimeout(runSequence, 1500); // Сәл ұзағырақ көрсету үшін
+                setTimeout(runSequence, 1500);
             } else {
                 startSpacePhase();
             }
@@ -247,6 +259,14 @@
 
         function flipPage(element, index) {
             const isFlipped = element.classList.toggle('flipped');
+            
+            // Егер бірінші парақ ашылса, бүкіл кітапты ортаға жылжытамыз
+            if (document.querySelector('.flipped')) {
+                bookContainer.classList.add('is-open');
+            } else {
+                bookContainer.classList.remove('is-open');
+            }
+
             if (isFlipped) {
                 setTimeout(() => { element.style.zIndex = index; }, 500);
             } else {
@@ -275,8 +295,6 @@
         }
 
         setTimeout(runSequence, 500);
-
-        // Экран өлшемі өзгергенде канвасты реттеу
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -284,23 +302,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
