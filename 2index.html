@@ -63,16 +63,23 @@
             z-index: 0;
         }
 
-        /* КІТАПТЫҢ ОРНАЛАСУЫ (ОҢ ЖАҚҚА ЫҒЫСТЫРУ) */
+        /* КІТАПТЫҢ ОҢ ЖАҚТАҒЫ ОРНЫ */
         #book-container {
             position: fixed !important;
             top: 55% !important;
-            left: 75% !important; /* Оңға жылжыту */
-            transform: translate(-85%, -50%) scale(0.65) !important; 
+            left: 80% !important; /* Оң жақ шетке бекіту */
+            transform: translate(-90%, -50%) scale(0.6) !important; 
             display: none;
             z-index: 5;
             perspective: 2000px;
-            transition: all 1.2s ease-in-out; /* Парақ ашылғанда жылжу анимациясы */
+            /* Дірілді болдырмау үшін transition-ды тек қажет кезде қосамыз */
+            transition: left 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+
+        /* АШЫЛҒАНДА ОРТАҒА СӘЛ ЖЫЛЖУ */
+        #book-container.is-open {
+            left: 55% !important;
+            transform: translate(-50%, -50%) scale(0.6) !important;
         }
 
         .book {
@@ -90,13 +97,13 @@
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            backface-visibility: hidden;
         }
 
         .front, .back {
             position: absolute;
             width: 100%; height: 100%;
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -115,14 +122,7 @@
             pointer-events: none;
         }
 
-        /* АШЫЛҒАНДАҒЫ БҰРЫШ */
         .flipped { transform: rotateY(-160deg); } 
-
-        /* КІТАП АШЫЛҒАНДА ОРТАҒА ҚАРАЙ ЖЫЛЖУ (ПАРАҚТАР СЫЮЫ ҮШІН) */
-        #book-container.is-open {
-            left: 55% !important;
-            transform: translate(-50%, -50%) scale(0.65) !important;
-        }
 
         .star {
             position: absolute;
@@ -136,18 +136,17 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* МОБИЛЬДІ ТЕЛЕФОН ҮШІН ЖӨНДЕУ */
+        /* ТЕЛЕФОН ҮШІН ОҢ ЖАҚ ПОРТАЛЫ */
         @media (max-width: 600px) {
-            #wish-container { top: 10%; }
             #wish-text { font-size: 11px; }
             #book-container { 
                 top: 55% !important;
-                left: 80% !important; /* Телефонда оң жаққа жақынырақ */
-                transform: translate(-95%, -50%) scale(0.48) !important; 
+                left: 85% !important; /* Телефонда барынша оңға */
+                transform: translate(-95%, -50%) scale(0.45) !important; 
             }
             #book-container.is-open {
-                left: 50% !important; /* Ашылғанда ортаға келеді */
-                transform: translate(-50%, -50%) scale(0.48) !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) scale(0.45) !important;
             }
         }
     </style>
@@ -165,27 +164,27 @@
     <div id="book-container">
         <div class="book">
             <div class="page" style="z-index: 1;">
-                <div class="front"><img src="ani10.jfif" alt="6"></div>
+                <div class="front"><img src="ani10.jfif"></div>
             </div>
             <div class="page" id="p5" onclick="flipPage(this, 4)" style="z-index: 2;">
-                <div class="front"><img src="ani2.jfif" alt="5"></div>
-                <div class="back"><img src="ani9.jfif" alt="5-back"></div>
+                <div class="front"><img src="ani2.jfif"></div>
+                <div class="back"><img src="ani9.jfif"></div>
             </div>
             <div class="page" id="p4" onclick="flipPage(this, 3)" style="z-index: 3;">
-                <div class="front"><img src="ani8.jfif" alt="4"></div>
-                <div class="back"><img src="ani7.jfif" alt="4-back"></div>
+                <div class="front"><img src="ani8.jfif"></div>
+                <div class="back"><img src="ani7.jfif"></div>
             </div>
             <div class="page" id="p3" onclick="flipPage(this, 2)" style="z-index: 4;">
-                <div class="front"><img src="ani6.jfif" alt="3"></div>
-                <div class="back"><img src="ani5.jfif" alt="3-back"></div>
+                <div class="front"><img src="ani6.jfif"></div>
+                <div class="back"><img src="ani5.jfif"></div>
             </div>
             <div class="page" id="p2" onclick="flipPage(this, 1)" style="z-index: 5;">
-                <div class="front"><img src="ani4.jfif" alt="2"></div>
-                <div class="back"><img src="ani3.jfif" alt="2-back"></div>
+                <div class="front"><img src="ani4.jfif"></div>
+                <div class="back"><img src="ani3.jfif"></div>
             </div>
             <div class="page" id="p1" onclick="flipPage(this, 0)" style="z-index: 6;">
-                <div class="front"><img src="8march1.jpg" alt="1"></div>
-                <div class="back"><img src="ani1.jfif" alt="1-back"></div>
+                <div class="front"><img src="8march1.jpg"></div>
+                <div class="back"><img src="ani1.jfif"></div>
             </div>
         </div>
     </div>
@@ -245,7 +244,6 @@
 
         function startSpacePhase() {
             clearInterval(matrixInterval);
-            canvas.style.transition = "opacity 1s";
             canvas.style.opacity = "0";
             setTimeout(() => {
                 overlay.style.display = "none";
@@ -260,7 +258,7 @@
         function flipPage(element, index) {
             const isFlipped = element.classList.toggle('flipped');
             
-            // Егер бірінші парақ ашылса, бүкіл кітапты ортаға жылжытамыз
+            // Дірілді болдырмау үшін ашылғанда ғана класс қосамыз
             if (document.querySelector('.flipped')) {
                 bookContainer.classList.add('is-open');
             } else {
@@ -295,10 +293,6 @@
         }
 
         setTimeout(runSequence, 500);
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
     </script>
 </body>
 </html>
