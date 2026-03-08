@@ -28,19 +28,16 @@
             background-color: rgba(255, 255, 255, 0.2);
             padding: 15px 10px;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
             display: none;
             backdrop-filter: blur(5px);
         }
 
         #wish-text {
             color: #fff;
-            font-size: clamp(10px, 3.5vw, 16px);
+            font-size: 12px;
             text-align: center;
-            width: 100%;
             text-shadow: 0 0 10px #ff69b4;
             line-height: 1.6;
-            transition: opacity 0.5s ease;
         }
 
         #overlay {
@@ -48,7 +45,7 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             color: #fff;
-            font-size: clamp(18px, 6vw, 40px);
+            font-size: 24px;
             z-index: 10;
             text-align: center;
             text-shadow: 0 0 15px #ff69b4;
@@ -63,23 +60,16 @@
             z-index: 0;
         }
 
-        /* КІТАПТЫҢ ОҢ ЖАҚТАҒЫ ОРНЫ */
+        /* КІТАПТЫҢ ОРНЫ: ТЕК ОҢ ЖАҚТА ЖӘНЕ ҮЛКЕН */
         #book-container {
             position: fixed !important;
-            top: 55% !important;
-            left: 80% !important; /* Оң жақ шетке бекіту */
-            transform: translate(-90%, -50%) scale(0.6) !important; 
+            top: 50% !important;
+            left: 85% !important; /* Оң жаққа барынша ығыстыру */
+            /* scale(0.6) - үлкейтілді. translate(-100%) - дірілді болдырмау үшін нақты бекітілді */
+            transform: translate(-100%, -50%) scale(0.6) !important; 
             display: none;
             z-index: 5;
             perspective: 2000px;
-            /* Дірілді болдырмау үшін transition-ды тек қажет кезде қосамыз */
-            transition: left 0.8s ease-in-out, transform 0.8s ease-in-out;
-        }
-
-        /* АШЫЛҒАНДА ОРТАҒА СӘЛ ЖЫЛЖУ */
-        #book-container.is-open {
-            left: 55% !important;
-            transform: translate(-50%, -50%) scale(0.6) !important;
         }
 
         .book {
@@ -97,7 +87,6 @@
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            backface-visibility: hidden;
         }
 
         .front, .back {
@@ -115,14 +104,9 @@
 
         .back { transform: rotateY(180deg); }
 
-        .page img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-        }
+        .page img { width: 100%; height: 100%; object-fit: cover; }
 
-        .flipped { transform: rotateY(-160deg); } 
+        .flipped { transform: rotateY(-155deg); } 
 
         .star {
             position: absolute;
@@ -136,17 +120,11 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ТЕЛЕФОН ҮШІН ОҢ ЖАҚ ПОРТАЛЫ */
+        /* ТЕЛЕФОНДАҒЫ КӨЛЕМІ */
         @media (max-width: 600px) {
-            #wish-text { font-size: 11px; }
             #book-container { 
-                top: 55% !important;
-                left: 85% !important; /* Телефонда барынша оңға */
-                transform: translate(-95%, -50%) scale(0.45) !important; 
-            }
-            #book-container.is-open {
-                left: 50% !important;
-                transform: translate(-50%, -50%) scale(0.45) !important;
+                left: 92% !important; /* Телефонда оңға нық бекіту */
+                transform: translate(-100%, -50%) scale(0.55) !important; /* Көлемі 0.55-ке үлкейтілді */
             }
         }
     </style>
@@ -244,33 +222,20 @@
 
         function startSpacePhase() {
             clearInterval(matrixInterval);
-            canvas.style.opacity = "0";
-            setTimeout(() => {
-                overlay.style.display = "none";
-                canvas.style.display = 'none';
-                starfield.style.display = 'block';
-                bookContainer.style.display = 'block';
-                wishContainer.style.display = 'block';
-                createTwinklingStars();
-            }, 1000);
+            canvas.style.display = 'none';
+            starfield.style.display = 'block';
+            bookContainer.style.display = 'block';
+            wishContainer.style.display = 'block';
+            createTwinklingStars();
         }
 
         function flipPage(element, index) {
             const isFlipped = element.classList.toggle('flipped');
-            
-            // Дірілді болдырмау үшін ашылғанда ғана класс қосамыз
-            if (document.querySelector('.flipped')) {
-                bookContainer.classList.add('is-open');
-            } else {
-                bookContainer.classList.remove('is-open');
-            }
-
             if (isFlipped) {
                 setTimeout(() => { element.style.zIndex = index; }, 500);
             } else {
                 element.style.zIndex = 6 - index;
             }
-
             wishText.style.opacity = 0;
             setTimeout(() => {
                 wishText.innerText = wishes[index + 1] || wishes[wishes.length - 1];
@@ -284,9 +249,8 @@
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                const size = Math.random() * 2 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
+                star.style.width = '2px';
+                star.style.height = '2px';
                 star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
                 starfield.appendChild(star);
             }
