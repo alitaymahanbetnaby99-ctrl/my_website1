@@ -63,13 +63,14 @@
         /* КІТАПТЫҢ ОРНЫ: ТЕК ОҢ ЖАҚТА ЖӘНЕ ҮЛКЕН */
         #book-container {
             position: fixed !important;
-            top: 50% !important;
-            left: 85% !important; /* Оң жаққа барынша ығыстыру */
-            /* scale(0.6) - үлкейтілді. translate(-100%) - дірілді болдырмау үшін нақты бекітілді */
-            transform: translate(-100%, -50%) scale(0.6) !important; 
+            top: 55% !important; /* Сәл төменірек түсірілді */
+            left: 95% !important; /* Барынша оңға, қызыл жақтауға */
+            /* scale(0.68) - тағы да үлкейтілді */
+            transform: translate(-100%, -50%) scale(0.68) !important; 
             display: none;
             z-index: 5;
             perspective: 2000px;
+            /* Діріл болмауы үшін анимацияны тек параққа қалдырдық */
         }
 
         .book {
@@ -120,11 +121,12 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ТЕЛЕФОНДАҒЫ КӨЛЕМІ */
+        /* ТЕЛЕФОН ҮШІН (ҚЫЗЫЛ ЖАҚТАУ ТҰРҒАН ЖЕРГЕ) */
         @media (max-width: 600px) {
             #book-container { 
-                left: 92% !important; /* Телефонда оңға нық бекіту */
-                transform: translate(-100%, -50%) scale(0.55) !important; /* Көлемі 0.55-ке үлкейтілді */
+                left: 98% !important; /* Телефонда оң жақ шетке нық бекіту */
+                /* scale(0.6) - телефонда да үлкейтілді */
+                transform: translate(-100%, -50%) scale(0.6) !important; 
             }
         }
     </style>
