@@ -3,229 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finish Academy Pro</title>
+    <title>alikxrem | Deep Scan</title>
     <style>
-        :root {
-            --primary: #1cb0f6; --dark: #1899d6; --bg: #f7f7f7;
-            --white: #ffffff; --text: #4b4b4b; --gold: #ffc800;
-            --green: #58cc02; --red: #ff4b4b; --purple: #ce82ff;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
-        .page { display: none; min-height: 100vh; flex-direction: column; padding-bottom: 90px; }
-        .active { display: flex; }
-
-        /* HEADER */
-        .header { background: white; padding: 15px 20px; border-bottom: 2px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .stat { display: flex; align-items: center; gap: 8px; font-weight: bold; }
-
-        /* CARDS */
-        .content { padding: 20px; max-width: 500px; margin: 0 auto; }
-        .card { background: white; border: 2px solid #e5e5e5; border-bottom: 5px solid #e5e5e5; border-radius: 20px; padding: 15px; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; gap: 15px; }
-        .card:active { transform: translateY(2px); border-bottom-width: 3px; }
-
-        /* SHOP & PROFILE */
-        .shop-item { background: white; border: 2px solid #e5e5e5; border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .buy-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        .profile-hero { text-align: center; padding: 30px; background: white; border-bottom: 2px solid #e5e5e5; }
-        .avatar-big { width: 80px; height: 80px; background: var(--purple); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold; }
-
-        /* NAVBAR */
-        .navbar { position: fixed; bottom: 0; width: 100%; background: white; border-top: 2px solid #e5e5e5; display: flex; justify-content: space-around; padding: 12px 0; }
-        .nav-btn { border: none; background: none; color: #afafaf; font-weight: bold; cursor: pointer; font-size: 11px; display: flex; flex-direction: column; align-items: center; }
-        .nav-btn.active-nav { color: var(--primary); }
-
-        /* QUIZ */
-        .opt { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e5e5e5; border-bottom: 4px solid #e5e5e5; border-radius: 15px; background: white; font-weight: bold; cursor: pointer; text-align: left; }
-        .opt.selected { background: #ddf4ff; border-color: var(--primary); }
-        #feedback { position: fixed; bottom: -200px; left: 0; width: 100%; padding: 25px; transition: 0.3s; z-index: 200; display: flex; justify-content: center; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+        :root { --neon: #00ff41; --bg: #050505; --warn: #ff003c; --info: #00d4ff; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Fira Code', monospace; margin: 0; padding: 15px; overflow: hidden; font-size: 14px; }
+        .header-bar { border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 11px; }
+        #console { height: 70vh; overflow-y: auto; scroll-behavior: smooth; border: 1px solid #111; padding: 10px; background: rgba(0,0,0,0.5); }
+        .line { margin-bottom: 6px; }
+        .input-box { display: flex; gap: 10px; border-top: 1px solid #222; padding-top: 15px; margin-top: 10px; }
+        input { background: transparent; border: none; color: #fff; font-family: 'Fira Code'; font-size: 16px; width: 100%; outline: none; }
+        .loading { color: var(--info); }
+        .danger { color: var(--warn); font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="login-page" class="page active" style="justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 25px; text-align: center; width: 80%; max-width: 350px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
-            <h1 style="color: var(--primary)">Finish Academy</h1>
-            <input type="text" id="u-input" placeholder="Атыңды жаз..." style="width:100%; padding:15px; margin:20px 0; border-radius:15px; border:2px solid #eee;">
-            <button onclick="start()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:bold; cursor:pointer; border-bottom:5px solid var(--dark);">БАСТАУ</button>
-        </div>
+    <div class="header-bar">
+        <div id="dev-info">DEVICE: DETECTING...</div>
+        <div id="ip-info">IP: 0.0.0.0</div>
+        <div id="geo-info">LOC: ...</div>
+        <div id="os-info">OS: ...</div>
     </div>
 
-    <div id="home-page" class="page">
-        <div class="header">
-            <div class="stat" style="color: var(--gold)">🔥 <span id="h-streak">1</span></div>
-            <div class="stat" style="color: var(--primary)">💎 <span id="h-xp">0</span></div>
-            <div class="stat" style="color: var(--purple)">🏆 <span id="h-rank">Новичок</span></div>
-        </div>
-        <div class="content">
-            <h3>ҰБТ Тақырыптары</h3>
-            <div class="card" onclick="launchQuiz('num')">🔢 <div><b>Санау жүйелері</b><br><small>20 сұрақ • +200 XP</small></div></div>
-            <div class="card" onclick="launchQuiz('logic')">🧠 <div><b>Логика</b><br><small>20 сұрақ • +200 XP</small></div></div>
-            <div class="card" onclick="launchQuiz('py')">🐍 <div><b>Python</b><br><small>20 сұрақ • +200 XP</small></div></div>
-            <div class="card" onclick="launchQuiz('web')">🎨 <div><b>HTML/CSS/JS</b><br><small>20 сұрақ • +200 XP</small></div></div>
-            <div class="card" onclick="launchQuiz('db')">🗄️ <div><b>Деректер қоры (SQL)</b><br><small>20 сұрақ • +200 XP</small></div></div>
-        </div>
+    <div id="console">
+        <div class="line">>> [SYSTEM] alikxrem TERMINAL v4.0 ACTIVE.</div>
+        <div class="line">>> [READY] Type 'hh' for master commands.</div>
     </div>
 
-    <div id="shop-page" class="page">
-        <div class="header"><h2>Дүкен</h2> <div class="stat" style="color: var(--primary)">💎 <span id="s-xp">0</span></div></div>
-        <div class="content">
-            <div class="shop-item"><div><b>XP Бустер</b><br><small>Ұпайды 2 еселейді</small></div> <button class="buy-btn" onclick="buy(500)">500 💎</button></div>
-            <div class="shop-item"><div><b>Қатеден қорғау</b><br><small>Бір қатені кешіреді</small></div> <button class="buy-btn" onclick="buy(300)">300 💎</button></div>
-            <div class="shop-item"><div><b>Алтын Скин</b><br><small>Профильді алтын қылады</small></div> <button class="buy-btn" onclick="buy(1000)">1000 💎</button></div>
-        </div>
+    <div class="input-box">
+        <span style="color:var(--neon)">root@alikxrem:~$</span>
+        <input type="text" id="userInput" autofocus autocomplete="off">
     </div>
-
-    <div id="profile-page" class="page">
-        <div class="profile-hero">
-            <div class="avatar-big" id="p-avatar">U</div>
-            <h2 id="p-name">User</h2>
-            <div style="color: var(--purple); font-weight: bold; border: 2px solid var(--purple); display: inline-block; padding: 5px 15px; border-radius: 20px;" id="p-rank">Новичок</div>
-        </div>
-        <div class="content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="card" style="flex-direction: column; text-align: center;"><b>💎 XP</b><span id="p-xp">0</span></div>
-            <div class="card" style="flex-direction: column; text-align: center;"><b>🔥 Күн</b><span id="p-streak">1</span></div>
-        </div>
-    </div>
-
-    <div id="quiz-page" class="page">
-        <div class="header">
-            <button onclick="nav('home-page')" style="border:none; background:none; font-size:24px;">✕</button>
-            <div style="flex-grow:1; height:12px; background:#e5e5e5; margin:0 15px; border-radius:10px; overflow:hidden;">
-                <div id="fill" style="width:0%; height:100%; background:var(--primary); transition:0.3s;"></div>
-            </div>
-            <span id="q-count">1/20</span>
-        </div>
-        <div class="content" style="text-align:center;">
-            <h2 id="q-text">Сұрақ?</h2>
-            <div id="options"></div>
-            <button id="check-btn" onclick="check()" style="width:100%; padding:18px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:bold; margin-top:30px; border-bottom:5px solid var(--dark);" disabled>ТЕКСЕРУ</button>
-        </div>
-    </div>
-
-    <div id="feedback">
-        <div style="width:100%; max-width:500px; display:flex; justify-content:space-between; align-items:center; color:white;">
-            <h2 id="fb-msg">Керемет!</h2>
-            <button onclick="next()" id="fb-btn" style="padding:12px 25px; border-radius:12px; border:none; font-weight:bold; cursor:pointer; background:white;">ЖАЛҒАСТЫРУ</button>
-        </div>
-    </div>
-
-    <nav class="navbar" id="nav" style="display:none;">
-        <button class="nav-btn active-nav" onclick="nav('home-page', this)"><span>🏠</span>ҮЙ</button>
-        <button class="nav-btn" onclick="nav('shop-page', this)"><span>🛒</span>ДҮКЕН</button>
-        <button class="nav-btn" onclick="nav('profile-page', this)"><span>👤</span>ПРОФИЛЬ</button>
-    </nav>
 
     <script>
-        const levels = {
-            num: [{q: "1010 екілік жүйеде?", a: ["8", "10", "12"], c: 1}, {q: "F он алтылық жүйеде?", a: ["10", "15", "16"], c: 1}],
-            py: [{q: "Тізім қалай жасалады?", a: ["[]", "{}", "()"], c: 0}, {q: "Шығару функциясы?", a: ["print", "input", "out"], c: 0}],
-            web: [{q: "Сайт қаңқасы?", a: ["CSS", "HTML", "JS"], c: 1}],
-            logic: [{q: "Конъюнкция деген не?", a: ["Және", "Немесе", "Емес"], c: 0}],
-            db: [{q: "SQL - бұл...", a: ["Тіл", "База", "Сервер"], c: 0}]
-        };
+        const input = document.getElementById('userInput');
+        const consoleOut = document.getElementById('console');
 
-        // Сұрақтарды 20-ға дейін автоматты толтыру
-        Object.keys(levels).forEach(k => {
-            while(levels[k].length < 20) levels[k].push({q: `${k} бойынша сұрақ #${levels[k].length+1}`, a: ["Жауап 1", "Жауап 2", "Жауап 3"], c: 0});
+        // Құрылғыны және ОЖ-ны шын анықтау
+        function getHardwareInfo() {
+            const ua = navigator.userAgent;
+            let device = "Desktop PC";
+            if (/Android/i.test(ua)) device = "Android Mobile";
+            else if (/iPhone/i.test(ua)) device = "iPhone Mobile";
+
+            let os = "Unknown OS";
+            if (ua.indexOf("Windows") !== -1) os = "Windows";
+            else if (ua.indexOf("Android") !== -1) os = "Android";
+            else if (ua.indexOf("Linux") !== -1) os = "Linux";
+            else if (ua.indexOf("Mac") !== -1) os = "MacOS/iOS";
+
+            document.getElementById('dev-info').innerText = `DEVICE: ${device}`;
+            document.getElementById('os-info').innerText = `OS: ${os}`;
+            return { device, os };
+        }
+
+        // IP және Локация
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('ip-info').innerText = `IP: ${data.ip}`;
+                document.getElementById('geo-info').innerText = `LOC: ${data.city.toUpperCase()}`;
+                print(`Жүйеге қосылды: ${data.city}, ${data.org}`, "loading");
+            });
+
+        getHardwareInfo();
+
+        function print(text, type = "") {
+            const div = document.createElement('div');
+            div.className = `line ${type}`;
+            div.innerHTML = `>> ${text}`;
+            consoleOut.appendChild(div);
+            consoleOut.scrollTop = consoleOut.scrollHeight;
+        }
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmdLine = input.value.trim();
+                const [cmd, ...args] = cmdLine.toLowerCase().split(' ');
+                print(`<span style="color:white">${cmdLine}</span>`);
+                process(cmd, args);
+                input.value = '';
+            }
         });
 
-        let user = { name: "", xp: 0, streak: 1, rank: "Новичок", selected: null };
-        let activeQ = [];
-        let idx = 0;
+        function process(cmd, args) {
+            switch(cmd) {
+                case 'hh':
+                    print("--- MASTER COMMANDS ---", "info");
+                    print("1. <b style='color:white'>vibe [номер]</b> - Номер бойынша іздеу");
+                    print("2. <b style='color:white'>whoami</b> - Құрылғы мәліметі");
+                    print("3. <b style='color:white'>track [ip]</b> - IP-ге трекинг жасау");
+                    print("4. <b style='color:white'>ddos [url]</b> - Жалған шабуыл бастау");
+                    print("5. <b style='color:white'>cls</b> - Тазалау");
+                    break;
 
-        function start() {
-            const val = document.getElementById('u-input').value;
-            if(!val) return;
-            user.name = val;
-            document.getElementById('p-name').innerText = val;
-            document.getElementById('p-avatar').innerText = val[0].toUpperCase();
-            document.getElementById('nav').style.display = 'flex';
-            nav('home-page');
-        }
+                case 'vibe':
+                    if(!args[0]) return print("Қате: Номер жазыңыз. Мысалы: vibe 8707...", "danger");
+                    print(`Базадан ізделуде: ${args[0]}...`, "loading");
+                    setTimeout(() => {
+                        print("НӘТИЖЕ ТАБЫЛДЫ:", "info");
+                        print("Есімі: *Жасырын*");
+                        print("Оператор: Beeline/Kcell");
+                        print("Тіркелген қала: Шымкент/Алматы");
+                        print("Қауіп деңгейі: Төмен", "neon");
+                    }, 2000);
+                    break;
 
-        function nav(id, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(btn) {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-                btn.classList.add('active-nav');
+                case 'whoami':
+                    const info = getHardwareInfo();
+                    print(`Құрылғы: ${info.device}`);
+                    print(`Операциялық жүйе: ${info.os}`);
+                    print(`Браузер: ${navigator.appName}`);
+                    print(`Тіл: ${navigator.language}`);
+                    break;
+
+                case 'track':
+                    const targetIp = args[0] || "127.0.0.1";
+                    print(`${targetIp} адресіне спутник қосылуда...`);
+                    setTimeout(() => {
+                        print(`SATELLITE CONNECTED. COORDINATES: 42.3249, 69.5881`, "info");
+                        print(`PROVIDER: KAZAKHTELECOM AS1234`, "info");
+                    }, 1500);
+                    break;
+
+                case 'ddos':
+                    if(!args[0]) return print("Қате: Сайт адресін жазыңыз.", "danger");
+                    let p = 0;
+                    const itv = setInterval(() => {
+                        print(`ATTACKING ${args[0]} THROUGH PROXY... ${p}%`, "danger");
+                        p += 25;
+                        if(p > 100) { clearInterval(itv); print("TARGET SERVER OFFLINE.", "info"); }
+                    }, 600);
+                    break;
+
+                case 'cls': consoleOut.innerHTML = ''; break;
+                default: if(cmd) print(`Unknown: ${cmd}. Try 'hh'.`, "danger");
             }
-        }
-
-        function launchQuiz(key) {
-            activeQ = levels[key];
-            idx = 0;
-            nav('quiz-page');
-            loadQ();
-        }
-
-        function loadQ() {
-            const q = activeQ[idx];
-            document.getElementById('q-text').innerText = q.q;
-            document.getElementById('q-count').innerText = `${idx+1}/20`;
-            const box = document.getElementById('options');
-            box.innerHTML = '';
-            user.selected = null;
-            document.getElementById('check-btn').disabled = true;
-            document.getElementById('feedback').style.bottom = "-200px";
-
-            q.a.forEach((opt, i) => {
-                const b = document.createElement('button');
-                b.className = 'opt';
-                b.innerText = opt;
-                b.onclick = () => {
-                    document.querySelectorAll('.opt').forEach(el => el.classList.remove('selected'));
-                    b.classList.add('selected');
-                    user.selected = i;
-                    document.getElementById('check-btn').disabled = false;
-                };
-                box.appendChild(b);
-            });
-            document.getElementById('fill').style.width = (idx/20)*100 + "%";
-        }
-
-        function check() {
-            const isCorrect = user.selected === activeQ[idx].c;
-            const fb = document.getElementById('feedback');
-            fb.style.bottom = "0";
-            if(isCorrect) {
-                user.xp += 10;
-                fb.style.background = "var(--green)";
-                document.getElementById('fb-msg').innerText = "ДҰРЫС! +10 XP";
-            } else {
-                fb.style.background = "var(--red)";
-                document.getElementById('fb-msg').innerText = "ҚАТЕ! Дұрысы: " + activeQ[idx].a[activeQ[idx].c];
-            }
-            updateStats();
-        }
-
-        function next() {
-            idx++;
-            if(idx < 20) loadQ(); else nav('home-page');
-        }
-
-        function buy(cost) {
-            if(user.xp >= cost) {
-                user.xp -= cost;
-                alert("Сатып алынды!");
-                updateStats();
-            } else alert("XP жетпейді!");
-        }
-
-        function updateStats() {
-            if(user.xp > 200) user.rank = "Оқушы";
-            if(user.xp > 500) user.rank = "Программист";
-            if(user.xp > 1000) user.rank = "Алтын Хакер";
-
-            const ids = ['h-xp', 's-xp', 'p-xp', 'q-score', 'h-rank', 'p-rank'];
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) {
-                    if(id.includes('xp')) el.innerText = user.xp;
-                    else el.innerText = user.rank;
-                }
-            });
         }
     </script>
 </body>
