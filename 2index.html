@@ -3,177 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finish Academy - IT Robot</title>
-    
+    <title>IT-Robot App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
         :root {
-            --tg-theme-bg: #1a1a1a;
-            --primary-color: #4facfe;
-            --gold: #ffd700;
-            --bronze: #cd7f32;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #38bdf8;
+            --accent: #f59e0b;
+            --nav-bg: #1e293b;
         }
 
         body {
-            background-color: var(--tg-theme-bg);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
         }
 
-        /* Статус-бар */
-        .header {
+        /* Беттер стилі */
+        .page {
+            display: none;
+            height: calc(100vh - 70px); /* Астыңғы менюге орын қалдыру */
             width: 100%;
-            padding: 15px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .active-page { display: flex; flex-direction: column; align-items: center; }
+
+        /* Жоғарғы статус */
+        .status-header {
+            width: 100%;
             display: flex;
             justify-content: space-between;
-            background: #252525;
-            box-sizing: border-box;
-            border-bottom: 2px solid var(--primary-color);
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid #334155;
         }
 
-        .league-badge {
-            background: linear-gradient(45deg, var(--bronze), var(--gold));
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        /* Робот контейнері */
-        .main-stage {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        .robot-mascot {
-            width: 180px;
-            height: 220px;
-            background: #333;
-            border-radius: 40px;
-            border: 4px solid var(--primary-color);
+        /* Робот */
+        .robot-box {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #334155 0%, #0f172a 100%);
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            margin: 40px 0;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 80px;
-            box-shadow: 0 0 25px rgba(79, 172, 254, 0.4);
-            transition: all 0.3s ease;
-            position: relative;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
         }
 
-        /* Төменгі мәзір */
-        .controls {
+        /* Астыңғы меню (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 20px;
-            box-sizing: border-box;
-            background: #222;
+            height: 70px;
+            background: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #334155;
+            z-index: 100;
         }
 
-        .btn {
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 24px; margin-bottom: 4px; }
+
+        /* Батырмалар стилі */
+        .action-btn {
+            background: var(--primary);
             border: none;
-            padding: 18px;
+            padding: 15px 30px;
             border-radius: 12px;
             color: white;
             font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: transform 0.1s;
+            margin: 10px;
+            width: 80%;
         }
 
-        .btn:active { transform: scale(0.95); }
-        .btn-quiz { background: var(--primary-color); }
-        .btn-case { background: #9400d3; }
-        .btn-wardrobe { background: #444; }
-        .btn-rank { background: #ffaa00; }
-
-        #xp-text { font-size: 20px; margin-top: 15px; color: var(--primary-color); }
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            width: 90%;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div id="league-name" class="league-badge">БРОНЗА</div>
-        <div style="font-weight: bold;">⚡ XP: <span id="xp-count">0</span></div>
+    <div class="status-header">
+        <span style="color: var(--accent); font-weight: bold;">💎 АЛТЫН ЛИГА</span>
+        <span>⚡ XP: <span id="xp-val">0</span></span>
     </div>
 
-    <div class="main-stage">
-        <div class="robot-mascot" id="robot-visual">🤖</div>
-        <div id="xp-text">Деңгей: 1</div>
+    <div id="main" class="page active-page">
+        <div class="robot-box" id="robot-main">🤖</div>
+        <h2>Сәлем, IT-Маман!</h2>
+        <p>Деңгей: 1</p>
+        <button class="action-btn" onclick="openCase()">📦 КЕЙС АШУ</button>
     </div>
 
-    <div class="controls">
-        <button class="btn btn-quiz" onclick="playQuiz()">⚡ КУИЗ</button>
-        <button class="btn btn-case" onclick="openCase()">📦 КЕЙС</button>
-        <button class="btn btn-wardrobe" onclick="openWardrobe()">👕 ГАРДЕРОБ</button>
-        <button class="btn btn-rank" onclick="showRank()">🏆 РЕЙТИНГ</button>
+    <div id="quiz" class="page">
+        <div class="quiz-card">
+            <h3 id="question">Информатика сұрағы осында шығады...</h3>
+            <div id="options">
+                <button class="action-btn" style="background:#334155" onclick="checkAns(true)">А) Жауап 1</button>
+                <button class="action-btn" style="background:#334155" onclick="checkAns(false)">Б) Жауап 2</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="wardrobe" class="page">
+        <h2>👕 Гардероб</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="action-btn" style="background:#444" onclick="changeSkin('🕶️')">Көзілдірік</button>
+            <button class="action-btn" style="background:#444" onclick="changeSkin('👑')">Тәж</button>
+            <button class="action-btn" style="background:#444" onclick="changeSkin('🎧')">Наушник</button>
+            <button class="action-btn" style="background:#444" onclick="changeSkin('🤖')">Бастапқы</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="nav('main', this)">
+            <span>🏠</span>
+            <span>Басты</span>
+        </div>
+        <div class="nav-item" onclick="nav('quiz', this)">
+            <span>⚡</span>
+            <span>Куиз</span>
+        </div>
+        <div class="nav-item" onclick="nav('wardrobe', this)">
+            <span>👕</span>
+            <span>Гардероб</span>
+        </div>
     </div>
 
     <script>
-        // Telegram Web App бастау
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Экранды толық жаю
-        tg.ready();
+        tg.expand();
 
         let xp = 0;
-        const leagues = ["БРОНЗА", "КҮМІС", "АЛТЫН", "АЛМАС", "ТИТАН", "МАСТЕР", "КИБЕР", "ЛЕГЕНДА"];
 
-        function playQuiz() {
-            // Қарапайым логика: әр басқанда 100 XP
-            xp += 100;
-            updateStats();
+        function nav(pageId, el) {
+            // Барлық бетті жасыру
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
-            // Telegram-ның дірілдету (Vibration) эффектісі
-            tg.HapticFeedback.impactOccurred('medium');
+            // Керекті бетті көрсету
+            document.getElementById(pageId).classList.add('active-page');
+            el.classList.add('active');
+            
+            tg.HapticFeedback.impactOccurred('light');
         }
 
-        function updateStats() {
-            document.getElementById('xp-count').innerText = xp;
-            
-            // Лиганы есептеу
-            let lIdx = Math.floor(xp / 500);
-            if (lIdx >= leagues.length) lIdx = leagues.length - 1;
-            
-            const lName = document.getElementById('league-name');
-            lName.innerText = leagues[lIdx];
+        function changeSkin(emoji) {
+            document.getElementById('robot-main').innerText = emoji;
+            tg.HapticFeedback.notificationOccurred('success');
+        }
 
-            // Роботтың деңгейіне қарай эффект қосу
-            if(xp >= 500) {
-                document.getElementById('robot-visual').style.borderColor = "#ffd700";
-                document.getElementById('robot-visual').style.boxShadow = "0 0 30px #ffd700";
+        function checkAns(isCorrect) {
+            if(isCorrect) {
+                xp += 50;
+                document.getElementById('xp-val').innerText = xp;
+                tg.showAlert("Дұрыс! +50 XP");
             }
+            tg.HapticFeedback.impactOccurred('medium');
         }
 
         function openCase() {
             tg.showPopup({
-                title: 'Кейс ашылуда!',
-                message: 'Саған "2x XP" бустері түсті! 🎉',
-                buttons: [{type: 'ok', text: 'Керемет!'}]
+                title: '📦 Кейс',
+                message: 'Саған жаңа "Кибер-көзілдірік" түсті!',
+                buttons: [{type: 'ok'}]
             });
         }
-
-        function openWardrobe() {
-            tg.showAlert("Гардероб жақында ашылады! Роботыңа киім дайындап жатырмыз.");
-        }
-
-        function showRank() {
-            tg.showAlert("Сен әзірше өз лигаңда TOP-10 тізіміндесің!");
-        }
-
     </script>
 </body>
 </html>
