@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IT-Robot Pro</title>
+    <title>QANAT IT-Robot</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg: #0f172a;
             --card: #1e293b;
             --primary: #38bdf8;
-            --gold: #fbbf24;
+            --accent: #818cf8;
         }
 
         body {
@@ -21,102 +21,99 @@
             overflow: hidden;
         }
 
-        /* Жоғарғы статус бар - Дұрысталған */
+        /* Top Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: var(--card);
-            border-bottom: 2px solid var(--primary);
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--primary);
         }
 
         .profile-btn {
-            background: #334155;
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
+            background: var(--card);
             border: 1px solid var(--primary);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .xp-badge {
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
+        .xp-display {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             padding: 8px 15px;
             border-radius: 12px;
             font-weight: 800;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
         }
 
-        /* Басты беттегі Робот */
-        .robot-container {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            margin: 30px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        /* Pages */
+        .page { display: none; height: 80vh; padding: 20px; text-align: center; }
+        .active { display: flex; flex-direction: column; align-items: center; }
 
-        #robot-img {
-            width: 100%;
+        /* Main Robot Image */
+        .robot-img {
+            width: 280px;
             height: auto;
-            z-index: 1;
+            margin: 20px 0;
+            filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4));
         }
 
-        /* Бөлімдер (Pages) */
-        .page { display: none; padding: 20px; text-align: center; height: 80vh; }
-        .active { display: block; }
-
-        h2 { font-size: 28px; margin-bottom: 10px; } /* Текстті үлкейттік */
-
-        /* Астыңғы меню батырмалары */
+        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
-            bottom: 0; width: 100%;
-            height: 80px;
+            bottom: 0; width: 100%; height: 85px;
             background: var(--card);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+            display: flex; justify-content: space-around; align-items: center;
             border-top: 1px solid #334155;
         }
 
         .nav-btn {
-            display: flex;
+            display: flex; flex-direction: column; align-items: center;
+            color: #94a3b8; font-size: 14px; font-weight: bold;
+        }
+
+        .nav-btn img { width: 32px; height: 32px; margin-bottom: 5px; opacity: 0.6; }
+        .active-nav { color: var(--primary); }
+        .active-nav img { opacity: 1; filter: drop-shadow(0 0 5px var(--primary)); }
+
+        /* PROFILE MODAL (Профиль беті) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
             flex-direction: column;
             align-items: center;
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 16px; /* Текст өлшемі орташа */
-            font-weight: 600;
+            justify-content: center;
         }
 
-        .nav-btn.active-nav { color: var(--primary); transform: scale(1.1); }
-
-        /* Гардеробтағы суреттер тізімі */
-        .items-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .item-card {
+        .modal-content {
             background: var(--card);
-            padding: 10px;
-            border-radius: 15px;
-            border: 1px solid #334155;
+            width: 85%;
+            padding: 30px;
+            border-radius: 25px;
+            border: 2px solid var(--primary);
+            text-align: center;
         }
 
-        .item-card img { width: 60px; height: 60px; display: block; margin: 0 auto 10px; }
-        
+        .close-btn {
+            margin-top: 20px;
+            background: var(--primary);
+            border: none; padding: 12px 25px;
+            color: white; border-radius: 10px; font-weight: bold;
+        }
+
         .action-btn {
             background: var(--primary);
-            border: none; color: white;
-            padding: 12px; border-radius: 10px;
-            width: 100%; font-weight: bold;
+            border: none; padding: 15px;
+            width: 90%; border-radius: 15px;
+            color: white; font-size: 18px; font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -124,50 +121,44 @@
 
     <div class="top-bar">
         <div class="profile-btn" onclick="openProfile()">👤 Профиль</div>
-        <div class="xp-badge">⚡ <span id="xp-display">0</span> XP</div>
+        <div class="xp-display">⚡ <span id="xp-count">0</span> XP</div>
     </div>
 
     <div id="page-main" class="page active">
-        <div class="robot-container">
-            <img id="robot-img" src="robot_default.png" alt="Robot">
-        </div>
-        <h2 id="user-greeting">IT-Robot</h2>
-        <p style="color: var(--primary); font-size: 18px;">Лига: Бронза</p>
+        <img src="robot.webp" class="robot-img" alt="QANAT Robot">
+        <h1 style="margin: 0; color: var(--primary);">QANAT</h1>
+        <p style="color: #94a3b8; font-size: 18px;">Информатика Мастері</p>
+        <button class="action-btn" onclick="tg.showAlert('Кейстер жақында қосылады!')">📦 Кейс ашу</button>
     </div>
 
     <div id="page-quiz" class="page">
-        <h2>⚡ КУИЗ ОЙНАУ</h2>
-        <div style="background: var(--card); padding: 30px; border-radius: 20px; margin-top: 20px;">
-            <p id="q-text" style="font-size: 20px;">Сұрақ жүктелуде...</p>
-            <button class="action-btn" onclick="addXP(50)">Жауап беру</button>
-        </div>
+        <h2>⚡ УБТ Куиз</h2>
+        <p>Сұрақтар жүктелуде...</p>
     </div>
 
-    <div id="page-wardrobe" class="page">
-        <h2>👕 ГАРДЕРОБ</h2>
-        <div class="items-grid">
-            <div class="item-card">
-                <img src="skin1.png" alt="Skin 1">
-                <button class="action-btn" onclick="changeSkin('skin1.png')">Кию</button>
-            </div>
-            <div class="item-card">
-                <img src="skin2.png" alt="Skin 2">
-                <button class="action-btn" onclick="changeSkin('skin2.png')">Кию</button>
-            </div>
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 50px;">👨‍💻</div>
+            <h2 id="user-name">Пайдаланушы</h2>
+            <hr style="border: 0.5px solid #334155; margin: 20px 0;">
+            <p>🏆 Лига: <b>Бронза</b></p>
+            <p>🎯 Жалпы XP: <b id="profile-xp">0</b></p>
+            <p>📏 Бойы: <b>190 см</b></p>
+            <button class="close-btn" onclick="closeProfile()">Жабу</button>
         </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-btn active-nav" onclick="showPage('main', this)">
-            <span style="font-size: 24px;">🏠</span>
+            <img src="home.webp" alt="Home">
             <span>Басты</span>
         </div>
         <div class="nav-btn" onclick="showPage('quiz', this)">
-            <span style="font-size: 24px;">⚡</span>
+            <img src="home.webp" style="filter: hue-rotate(180deg);" alt="Quiz">
             <span>Куиз</span>
         </div>
-        <div class="nav-btn" onclick="showPage('wardrobe', this)">
-            <span style="font-size: 24px;">👕</span>
+        <div class="nav-btn" onclick="tg.showAlert('Гардероб дайындалуда!')">
+            <img src="home.webp" style="filter: grayscale(1);" alt="Wardrobe">
             <span>Гардероб</span>
         </div>
     </div>
@@ -176,39 +167,41 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let xp = 0;
+        let xp = localStorage.getItem('xp') ? parseInt(localStorage.getItem('xp')) : 0;
+        document.getElementById('xp-count').innerText = xp;
+
+        // Пайдаланушы атын Телеграмнан алу
+        if (tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
+        }
 
         function showPage(pageId, el) {
-            // Беттерді ауыстыру
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
             
-            // Менюді бояу
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
             el.classList.add('active-nav');
             
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function addXP(amount) {
-            xp += amount;
-            document.getElementById('xp-display').innerText = xp;
-            tg.HapticFeedback.notificationOccurred('success');
-        }
-
-        function changeSkin(imgName) {
-            // Роботтың суретін ауыстыру
-            document.getElementById('robot-img').src = imgName;
-            tg.showPopup({ message: "Киім ауыстырылды! ✅" });
-        }
-
         function openProfile() {
-            tg.showPopup({
-                title: 'Менің Профилім',
-                message: `Аты: ${tg.initDataUnsafe.user?.first_name || 'IT-Маман'}\nID: ${tg.initDataUnsafe.user?.id || '0000'}\nБойы: 190 см`,
-                buttons: [{type: 'ok', text: 'Жабу'}]
-            });
+            document.getElementById('profile-xp').innerText = xp;
+            document.getElementById('profile-modal').style.display = 'flex';
+            tg.HapticFeedback.impactOccurred('light');
         }
+
+        function closeProfile() {
+            document.getElementById('profile-modal').style.display = 'none';
+        }
+
+        // Тест үшін XP қосу (кейін алып тастауға болады)
+        document.querySelector('.robot-img').onclick = () => {
+            xp += 10;
+            document.getElementById('xp-count').innerText = xp;
+            localStorage.setItem('xp', xp);
+            tg.HapticFeedback.impactOccurred('small');
+        };
     </script>
 </body>
 </html>
