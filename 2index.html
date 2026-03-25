@@ -2,145 +2,178 @@
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>alikxrem | Deep Scan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finish Academy - IT Robot</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
-        :root { --neon: #00ff41; --bg: #050505; --warn: #ff003c; --info: #00d4ff; }
-        body { background: var(--bg); color: var(--neon); font-family: 'Fira Code', monospace; margin: 0; padding: 15px; overflow: hidden; font-size: 14px; }
-        .header-bar { border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 11px; }
-        #console { height: 70vh; overflow-y: auto; scroll-behavior: smooth; border: 1px solid #111; padding: 10px; background: rgba(0,0,0,0.5); }
-        .line { margin-bottom: 6px; }
-        .input-box { display: flex; gap: 10px; border-top: 1px solid #222; padding-top: 15px; margin-top: 10px; }
-        input { background: transparent; border: none; color: #fff; font-family: 'Fira Code'; font-size: 16px; width: 100%; outline: none; }
-        .loading { color: var(--info); }
-        .danger { color: var(--warn); font-weight: bold; }
+        :root {
+            --tg-theme-bg: #1a1a1a;
+            --primary-color: #4facfe;
+            --gold: #ffd700;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            background-color: var(--tg-theme-bg);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Статус-бар */
+        .header {
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            background: #252525;
+            box-sizing: border-box;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .league-badge {
+            background: linear-gradient(45deg, var(--bronze), var(--gold));
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        /* Робот контейнері */
+        .main-stage {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .robot-mascot {
+            width: 180px;
+            height: 220px;
+            background: #333;
+            border-radius: 40px;
+            border: 4px solid var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            box-shadow: 0 0 25px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Төменгі мәзір */
+        .controls {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #222;
+        }
+
+        .btn {
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn:active { transform: scale(0.95); }
+        .btn-quiz { background: var(--primary-color); }
+        .btn-case { background: #9400d3; }
+        .btn-wardrobe { background: #444; }
+        .btn-rank { background: #ffaa00; }
+
+        #xp-text { font-size: 20px; margin-top: 15px; color: var(--primary-color); }
     </style>
 </head>
 <body>
 
-    <div class="header-bar">
-        <div id="dev-info">DEVICE: DETECTING...</div>
-        <div id="ip-info">IP: 0.0.0.0</div>
-        <div id="geo-info">LOC: ...</div>
-        <div id="os-info">OS: ...</div>
+    <div class="header">
+        <div id="league-name" class="league-badge">БРОНЗА</div>
+        <div style="font-weight: bold;">⚡ XP: <span id="xp-count">0</span></div>
     </div>
 
-    <div id="console">
-        <div class="line">>> [SYSTEM] alikxrem TERMINAL v4.0 ACTIVE.</div>
-        <div class="line">>> [READY] Type 'hh' for master commands.</div>
+    <div class="main-stage">
+        <div class="robot-mascot" id="robot-visual">🤖</div>
+        <div id="xp-text">Деңгей: 1</div>
     </div>
 
-    <div class="input-box">
-        <span style="color:var(--neon)">root@alikxrem:~$</span>
-        <input type="text" id="userInput" autofocus autocomplete="off">
+    <div class="controls">
+        <button class="btn btn-quiz" onclick="playQuiz()">⚡ КУИЗ</button>
+        <button class="btn btn-case" onclick="openCase()">📦 КЕЙС</button>
+        <button class="btn btn-wardrobe" onclick="openWardrobe()">👕 ГАРДЕРОБ</button>
+        <button class="btn btn-rank" onclick="showRank()">🏆 РЕЙТИНГ</button>
     </div>
 
     <script>
-        const input = document.getElementById('userInput');
-        const consoleOut = document.getElementById('console');
+        // Telegram Web App бастау
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Экранды толық жаю
+        tg.ready();
 
-        // Құрылғыны және ОЖ-ны шын анықтау
-        function getHardwareInfo() {
-            const ua = navigator.userAgent;
-            let device = "Desktop PC";
-            if (/Android/i.test(ua)) device = "Android Mobile";
-            else if (/iPhone/i.test(ua)) device = "iPhone Mobile";
+        let xp = 0;
+        const leagues = ["БРОНЗА", "КҮМІС", "АЛТЫН", "АЛМАС", "ТИТАН", "МАСТЕР", "КИБЕР", "ЛЕГЕНДА"];
 
-            let os = "Unknown OS";
-            if (ua.indexOf("Windows") !== -1) os = "Windows";
-            else if (ua.indexOf("Android") !== -1) os = "Android";
-            else if (ua.indexOf("Linux") !== -1) os = "Linux";
-            else if (ua.indexOf("Mac") !== -1) os = "MacOS/iOS";
-
-            document.getElementById('dev-info').innerText = `DEVICE: ${device}`;
-            document.getElementById('os-info').innerText = `OS: ${os}`;
-            return { device, os };
+        function playQuiz() {
+            // Қарапайым логика: әр басқанда 100 XP
+            xp += 100;
+            updateStats();
+            
+            // Telegram-ның дірілдету (Vibration) эффектісі
+            tg.HapticFeedback.impactOccurred('medium');
         }
 
-        // IP және Локация
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('ip-info').innerText = `IP: ${data.ip}`;
-                document.getElementById('geo-info').innerText = `LOC: ${data.city.toUpperCase()}`;
-                print(`Жүйеге қосылды: ${data.city}, ${data.org}`, "loading");
+        function updateStats() {
+            document.getElementById('xp-count').innerText = xp;
+            
+            // Лиганы есептеу
+            let lIdx = Math.floor(xp / 500);
+            if (lIdx >= leagues.length) lIdx = leagues.length - 1;
+            
+            const lName = document.getElementById('league-name');
+            lName.innerText = leagues[lIdx];
+
+            // Роботтың деңгейіне қарай эффект қосу
+            if(xp >= 500) {
+                document.getElementById('robot-visual').style.borderColor = "#ffd700";
+                document.getElementById('robot-visual').style.boxShadow = "0 0 30px #ffd700";
+            }
+        }
+
+        function openCase() {
+            tg.showPopup({
+                title: 'Кейс ашылуда!',
+                message: 'Саған "2x XP" бустері түсті! 🎉',
+                buttons: [{type: 'ok', text: 'Керемет!'}]
             });
-
-        getHardwareInfo();
-
-        function print(text, type = "") {
-            const div = document.createElement('div');
-            div.className = `line ${type}`;
-            div.innerHTML = `>> ${text}`;
-            consoleOut.appendChild(div);
-            consoleOut.scrollTop = consoleOut.scrollHeight;
         }
 
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const cmdLine = input.value.trim();
-                const [cmd, ...args] = cmdLine.toLowerCase().split(' ');
-                print(`<span style="color:white">${cmdLine}</span>`);
-                process(cmd, args);
-                input.value = '';
-            }
-        });
-
-        function process(cmd, args) {
-            switch(cmd) {
-                case 'hh':
-                    print("--- MASTER COMMANDS ---", "info");
-                    print("1. <b style='color:white'>vibe [номер]</b> - Номер бойынша іздеу");
-                    print("2. <b style='color:white'>whoami</b> - Құрылғы мәліметі");
-                    print("3. <b style='color:white'>track [ip]</b> - IP-ге трекинг жасау");
-                    print("4. <b style='color:white'>ddos [url]</b> - Жалған шабуыл бастау");
-                    print("5. <b style='color:white'>cls</b> - Тазалау");
-                    break;
-
-                case 'vibe':
-                    if(!args[0]) return print("Қате: Номер жазыңыз. Мысалы: vibe 8707...", "danger");
-                    print(`Базадан ізделуде: ${args[0]}...`, "loading");
-                    setTimeout(() => {
-                        print("НӘТИЖЕ ТАБЫЛДЫ:", "info");
-                        print("Есімі: *Жасырын*");
-                        print("Оператор: Beeline/Kcell");
-                        print("Тіркелген қала: Шымкент/Алматы");
-                        print("Қауіп деңгейі: Төмен", "neon");
-                    }, 2000);
-                    break;
-
-                case 'whoami':
-                    const info = getHardwareInfo();
-                    print(`Құрылғы: ${info.device}`);
-                    print(`Операциялық жүйе: ${info.os}`);
-                    print(`Браузер: ${navigator.appName}`);
-                    print(`Тіл: ${navigator.language}`);
-                    break;
-
-                case 'track':
-                    const targetIp = args[0] || "127.0.0.1";
-                    print(`${targetIp} адресіне спутник қосылуда...`);
-                    setTimeout(() => {
-                        print(`SATELLITE CONNECTED. COORDINATES: 42.3249, 69.5881`, "info");
-                        print(`PROVIDER: KAZAKHTELECOM AS1234`, "info");
-                    }, 1500);
-                    break;
-
-                case 'ddos':
-                    if(!args[0]) return print("Қате: Сайт адресін жазыңыз.", "danger");
-                    let p = 0;
-                    const itv = setInterval(() => {
-                        print(`ATTACKING ${args[0]} THROUGH PROXY... ${p}%`, "danger");
-                        p += 25;
-                        if(p > 100) { clearInterval(itv); print("TARGET SERVER OFFLINE.", "info"); }
-                    }, 600);
-                    break;
-
-                case 'cls': consoleOut.innerHTML = ''; break;
-                default: if(cmd) print(`Unknown: ${cmd}. Try 'hh'.`, "danger");
-            }
+        function openWardrobe() {
+            tg.showAlert("Гардероб жақында ашылады! Роботыңа киім дайындап жатырмыз.");
         }
+
+        function showRank() {
+            tg.showAlert("Сен әзірше өз лигаңда TOP-10 тізіміндесің!");
+        }
+
     </script>
 </body>
 </html>
