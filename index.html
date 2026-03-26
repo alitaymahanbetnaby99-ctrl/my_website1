@@ -91,7 +91,7 @@
 
         /* АШЫЛҒАН КЕЗДЕГІ СТИЛЬ */
         .active-card { border-radius: 15px 15px 0 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .show { max-height: 500px; }
+        .show { max-height: 1000px; }
     </style>
 </head>
 <body>
@@ -102,44 +102,72 @@
     Артқа
 </a>
 
-    <h2>Тарауды таңдаңыз</h2>
+    <h2> Тарауды таңдаңыз</h2>
 
     <div class="category-card" style="border-left-color: #ef4444;" onclick="toggleTopic('num-sys', this)">
-        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"></div>
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/2996/2996284.png"></div>
         <div class="category-info">
-            <h3>Санау жүйелері</h3>
+            <h3>Есептеу жүйелері</h3>
             <p>Екілік, сегіздік, он алтылық</p>
         </div>
     </div>
     <div id="num-sys" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(1)">1.1 Позициялық санау жүйесі <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(2)">1.2 Бір жүйеден екіншіге көшу <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(3)">1.3 Есептер шығару <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(1)">[1.1] Санау жүйелері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(2)">[1.2] 10-дықтан 2,8,16 жүйеге айналдыру <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(3)">[1.3] 2,8,16 жүйені өзара айналдыру<span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(3)">[1.4] Бүтін емес санау жүйесі <span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #3b82f6;" onclick="toggleTopic('codtau', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/3295/3295483.png"></div>
+        <div class="category-info">
+            <h3>Ақпарат тарауы</h3>
+            <p>кодтау,өлшем бірліктері</p>
+        </div>
+    </div>
+    <div id="codtau" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(4)">[2.1] Ақпараттың өлшем бірліктері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(5)">[2.2] Ақпараттың өлшеу тәсілдері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(5)">[2.3] Ақпараттың қасиеттері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(5)">[2.3] Unicode және ASCII <span>▶</span></div>
     </div>
 
     <div class="category-card" style="border-left-color: #3b82f6;" onclick="toggleTopic('logic', this)">
-        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5661/5661135.png"></div>
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/17359/17359207.png"></div>
         <div class="category-info">
-            <h3>Логикалық негіздер</h3>
+            <h3>Логика тарауы</h3>
             <p>Және, Немесе, Емес амалдары</p>
         </div>
     </div>
     <div id="logic" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(4)">2.1 Логикалық операциялар <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(5)">2.2 Ақиқат кестесі <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(4)">[3.1] Логикалық операциялар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(5)">[3.2] Ақиқат кестесі <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(5)">[3.3] Логикалық схемалар <span>▶</span></div>
     </div>
 
     <div class="category-card" style="border-left-color: #1d4ed8;" onclick="toggleTopic('python', this)">
         <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png"></div>
         <div class="category-info">
-            <h3>Python Про</h3>
+            <h3>Python программалау тілі</h3>
             <p>Циклдер мен функциялар</p>
         </div>
     </div>
     <div id="python" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(6)">3.1 For және While циклдері <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(7)">3.2 Массивтер (Lists) <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(8)">3.3 def функциялары <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(6)">[4.1] Кіріспе.print(),input(),Арифметикалық амалдар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(7)">[4.2] Сызықтық алгоритмдер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.3] Тармақталған алгоритмдер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.4] Күрделі және кірістірілген шарттар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.5] Циклдік алгоритмдер | For<span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.6] Циклдік алгоритмдер | While<span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.7] Циклдік басқару нұсқаулықтары <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.8] Бір өлшемді массив <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.9] Екі өлшемді массив <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.10] Процедура<span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.11] Функция <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.12] Жолдық әдістер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.13] Файлмен жұмыс <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.14] Сұрыптау алгоритмдері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(8)">[4.15] Граф <span>▶</span></div>
     </div>
 
     <div class="category-card" style="border-left-color: #22c55e;" onclick="toggleTopic('excel', this)">
@@ -150,32 +178,69 @@
         </div>
     </div>
     <div id="excel" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(9)">4.1 Негізгі формулалар <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(10)">4.2 Диаграммалармен жұмыс <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(9)">[5.1] Excel.Кіріспе <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(10)">[5.2] Excel.Сілтемелер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(10)">[5.3] Excel.Кіріктірілген функция <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(10)">[5.4] Excel.Шартты форматтау <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(10)">[5.5] Excel.Диаграмма <span>▶</span></div>
     </div>
 
     <div class="category-card" style="border-left-color: #f97316;" onclick="toggleTopic('web', this)">
         <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/1051/1051277.png"></div>
         <div class="category-info">
-            <h3>Web-дизайн</h3>
-            <p>HTML5, CSS3 негіздері</p>
+            <h3>Web-жобалау</h3>
+            <p>HTML, CSS , JS</p>
         </div>
     </div>
     <div id="web" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(11)">5.1 HTML тегтері <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(12)">5.2 CSS стильдері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(11)">[6.1] HTML.Кіріспе <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(12)">[6.2] HTML.Кесте және сырғымалы жолдар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(12)">[6.3] HTML.Сурет және сілтеме <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(12)">[6.4] HTML.Мультимедиа <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(12)">[6.5] CSS <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(12)">[6.6] JavaScript <span>▶</span></div>
     </div>
 
     <div class="category-card" style="border-left-color: #f59e0b;" onclick="toggleTopic('sql', this)">
-        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png"></div>
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/586/586293.png"></div>
         <div class="category-info">
             <h3>Деректер қоры</h3>
             <p>MySQL сұраныстары</p>
         </div>
     </div>
     <div id="sql" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(13)">6.1 SELECT сұранысы <span>▶</span></div>
-        <div class="sub-item" onclick="startQuiz(14)">6.2 JOIN байланыстары <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(13)">[7.1] Деректер қоры 9-сынып <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[7.2] Реляциялық деректер қоры <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[7.3] Деректер қоры.Деректер типтері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[7.4] Деректер қоры.Құрылымдалған сұраныстар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[7.5] Деректер қоры.Форма.Есеп <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[7.6] Деректер қоры.PHP + MySQL <span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #f59e0b;" onclick="toggleTopic('teor', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/2004/2004628.png"></div>
+        <div class="category-info">
+            <h3>Теориялық тақырыптар</h3>
+            <p>Теориялық тақырыптар қамтылған</p>
+        </div>
+    </div>
+    <div id="teor" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(13)">[8.1] Компьютер жадысы <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.2] Компьютердің ішкі құрылымы <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.3] Программалық және Аппараттық жасақтамалар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.4] Компьютердің негізгі құрылғылары <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.5] Процессордың ішкі құрылымы <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.6] Компьютерлік желілер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.7] Вирус.Антивирус.Ақпараттық қауіпсіздік <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.8] Желілік этикет <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.9] Компьютерлік желіге пайдаланылатын құралдар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.10] Бұлттық технологиялар <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.11] Компьютерлік желілер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.12] IP-адрестер <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.13] Домен<span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.14] Ақпараттық қауіпсіздік <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.15] Ақпаратты қорғау әдістері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(14)">[8.16] Идентификация.Аутенфикация <span>▶</span></div>
     </div>
 
     <script>
