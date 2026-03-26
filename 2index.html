@@ -3,240 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>QANAT IT-Robot</title>
+    <title>QANAT IT-Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg: #0f172a;
+            --bg: #111827;
             --card: #1e293b;
             --primary: #38bdf8;
-            --accent: #818cf8;
-            --gold: #fbbf24;
+            --gold: #facc15;
         }
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Montserrat', sans-serif; /* Шрифт ауыстырылды */
+            overflow: hidden; 
+            -webkit-tap-highlight-color: transparent; 
         }
-
-        .top-bar {
+        
+        /* TOP BAR */
+        .top-bar { 
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 20px; background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(10px); border-bottom: 2px solid var(--primary);
-            position: fixed; top: 0; width: 100%; z-index: 100; box-sizing: border-box;
+            padding: 10px 20px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3); position: fixed; top: 0; width: 100%; z-index: 100; box-sizing: border-box; 
         }
 
-        .profile-btn { background: var(--card); border: 1px solid var(--primary); color: white; padding: 6px 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .xp-badge { background: linear-gradient(90deg, var(--primary), var(--accent)); padding: 6px 15px; border-radius: 12px; font-weight: 800; }
-
-        .page {
-            display: none; height: 100vh; padding: 80px 20px 100px 20px;
-            overflow-y: auto; box-sizing: border-box; text-align: center;
-            -webkit-overflow-scrolling: touch;
+        .profile-btn {
+            display: flex; align-items: center; gap: 8px; background: var(--card);
+            padding: 8px 16px; border: 2px solid var(--primary); border-radius: 25px;
+            cursor: pointer; font-weight: 800; font-size: 14px;
         }
 
-        .active { display: flex; flex-direction: column; align-items: center; }
-        .robot-img { width: 220px; height: auto; margin: 20px 0; filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4)); cursor: pointer; transition: 0.1s; }
-        .robot-img:active { transform: scale(0.95); }
-        .title-name { font-size: 32px; color: var(--primary); margin: 0; font-weight: 900; }
+        .xp-badge { background: linear-gradient(45deg, var(--primary), #0ea5e9); padding: 6px 16px; border-radius: 20px; font-weight: 900; }
 
-        .action-btn {
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            border: none; padding: 15px; width: 90%; border-radius: 18px;
-            color: white; font-size: 18px; font-weight: bold; margin: 10px 0;
-            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); cursor: pointer;
-        }
+        .page { display: none; height: 100vh; padding: 80px 15px 120px 15px; overflow-y: auto; flex-direction: column; align-items: center; box-sizing: border-box; width: 100%; }
+        .active { display: flex; }
 
+        /* QANAT PASS CARD */
         .pass-card {
-            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-            width: 90%; padding: 20px; border-radius: 20px; margin-top: 20px;
-            border: 1px solid rgba(255,255,255,0.1); text-align: left;
+            width: 100%; background: #262f3f; border-radius: 20px; padding: 20px; margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
         }
+        .pass-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .pass-title { color: #facc15; font-weight: 900; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+        .pass-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 15px; font-weight: 400; }
+        .pass-bar-bg { width: 100%; height: 12px; background: #1a1f2e; border-radius: 10px; overflow: hidden; }
+        .pass-progress { height: 100%; background: #facc15; width: 20%; box-shadow: 0 0 12px #facc15; }
 
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 80px;
-            background: var(--card); display: flex; justify-content: space-around;
-            align-items: center; border-top: 1px solid #334155; z-index: 100;
+        /* CATEGORY CARDS */
+        .category-card {
+            width: 100%; background: #1e293b; border-radius: 15px; margin-bottom: 12px; 
+            padding: 15px; display: flex; align-items: center; border-left: 6px solid var(--primary);
+            box-sizing: border-box;
         }
+        .category-icon { width: 50px; height: 50px; margin-right: 15px; flex-shrink: 0; }
+        .category-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .category-info h3 { margin: 0; font-size: 18px; font-weight: 800; }
+        .category-info p { margin: 4px 0 0 0; font-size: 13px; color: #94a3b8; font-weight: 400; }
 
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #94a3b8; font-weight: bold; font-size: 14px; cursor: pointer; }
-        .nav-btn span { margin-top: 5px; }
-        .active-nav { color: var(--primary); }
-
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.98); z-index: 1000;
-            flex-direction: column; align-items: center; justify-content: center;
+        /* BOTTOM NAV */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; right: 0; height: 75px; 
+            background: #1e293b; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100;
         }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94a3b8; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .nav-btn span:first-child { font-size: 22px; }
+        .active-nav { color: #38bdf8; transform: translateY(-3px); }
 
-        .modal-card { background: var(--card); width: 85%; padding: 30px; border-radius: 25px; border: 2px solid var(--primary); text-align: center; }
+        /* PROFILE */
+        .profile-container { width: 100%; text-align: center; }
+        .avatar-circle { width: 100px; height: 100px; background: linear-gradient(45deg, #38bdf8, #1d4ed8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 45px; border: 4px solid #1e293b; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 20px; }
+        .stat-box { background: #1e293b; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+
+        .item-slot { width: 100%; background: #1e293b; padding: 15px; border-radius: 15px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid rgba(56, 189, 248, 0.2); }
+        h1, h2 { font-weight: 900; letter-spacing: -0.5px; }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div class="profile-btn" onclick="openProfile()">👤 Профиль</div>
+        <div class="profile-btn" onclick="nav('profile', this)">👤 <span id="u-top-name">Профиль</span></div>
         <div class="xp-badge">⚡ <span id="xp-count">0</span> XP</div>
     </div>
 
-    <div id="page-main" class="page active">
-        <img src="robot.webp" class="robot-img" id="robot-display" alt="QANAT" onclick="clickRobot()">
-        <h1 class="title-name">QANAT</h1>
-        <p id="level-txt" style="color: #94a3b8; margin-bottom: 20px;">Деңгей: 1</p>
-        
-        <button class="action-btn" onclick="tg.showAlert('📦 Кейстер жақында қосылады!')">📦 КЕЙС АШУ</button>
-        
+    <div id="p-main" class="page active">
+        <h1 style="margin: 10px 0; font-size: 28px;">Қош келдің, <span id="u-welcome-name">Достым</span>!</h1>
         <div class="pass-card">
-            <h3 style="margin: 0; color: var(--gold);">🏆 QANAT PASS</h3>
-            <p style="font-size: 14px; color: #cbd5e1;">Тапсырмаларды орындап, эксклюзивті киімдер ал!</p>
-            <div style="background: #0f172a; height: 8px; border-radius: 4px; margin-top: 10px;">
-                <div id="pass-progress" style="background: var(--gold); width: 0%; height: 100%; border-radius: 4px; transition: 0.5s;"></div>
+            <div class="pass-header"><span style="font-size: 24px;">🏆</span><span class="pass-title">QANAT PASS</span></div>
+            <div class="pass-desc">Тапсырмаларды орындап, эксклюзивті сыйлықтар ал!</div>
+            <div class="pass-bar-bg"><div class="pass-progress" id="pass-width"></div></div>
+        </div>
+        <div class="item-slot" style="margin-top: 20px;">
+            <div style="font-size: 30px; margin-right: 15px;">🚀</div>
+            <div><h4 style="margin:0; font-weight:800;">Деңгейің</h4><p style="margin:0; font-size:12px; color:var(--primary); font-weight:700;"><span id="u-league">Bronze</span> Лигасы | <span id="u-level">1</span> деңгей</p></div>
+        </div>
+    </div>
+
+    <div id="p-quiz" class="page">
+        <h2 style="margin-bottom: 20px; color: var(--primary); width: 100%;">Тарауды таңдаңыз</h2>
+        
+        <div class="category-card" style="border-left-color: #ef4444;" onclick="goTo('number-systems.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"></div>
+            <div class="category-info"><h3>Санау жүйелері</h3><p>Екілік, сегіздік, он алтылық</p></div>
+        </div>
+
+        <div class="category-card" style="border-left-color: #3b82f6;" onclick="goTo('logic.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5661/5661135.png"></div>
+            <div class="category-info"><h3>Логикалық негіздер</h3><p>Және, Немесе, Емес амалдары</p></div>
+        </div>
+
+        <div class="category-card" style="border-left-color: #1d4ed8;" onclick="goTo('python.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png"></div>
+            <div class="category-info"><h3>Python Про</h3><p>Циклдер мен функциялар</p></div>
+        </div>
+
+        <div class="category-card" style="border-left-color: #22c55e;" onclick="goTo('excel.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/732/732220.png"></div>
+            <div class="category-info"><h3>MS Excel</h3><p>Кестелер және формулалар</p></div>
+        </div>
+
+        <div class="category-card" style="border-left-color: #f97316;" onclick="goTo('web.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/1051/1051277.png"></div>
+            <div class="category-info"><h3>Web-дизайн</h3><p>HTML5, CSS3 негіздері</p></div>
+        </div>
+
+        <div class="category-card" style="border-left-color: #f59e0b;" onclick="goTo('mysql.html')">
+            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png"></div>
+            <div class="category-info"><h3>Деректер қоры</h3><p>MySQL сұраныстары</p></div>
+        </div>
+    </div>
+
+    <div id="p-events" class="page">
+        <h2 style="margin-bottom: 20px; color: #facc15; width: 100%;">Жарыстар</h2>
+        <div class="item-slot" style="border-left: 5px solid #facc15;">
+            <div style="font-size: 30px; margin-right: 15px;">📅</div>
+            <div><h4 style="margin:0; font-weight:800;">Апталық Турнир</h4><p style="margin:0; font-size:12px; opacity:0.7;">Жексенбі, 20:00</p></div>
+        </div>
+    </div>
+
+    <div id="p-items" class="page">
+        <h2 style="margin-bottom: 20px; color: #22c55e; width: 100%;">Заттарым</h2>
+        <div class="item-slot">
+            <div style="font-size: 30px; margin-right: 15px;">🎒</div>
+            <div><h4 style="margin:0; font-weight:800;">Бастапқы пакет</h4><p style="margin:0; font-size:12px; opacity:0.7;">Қолда бар заттар: 1</p></div>
+        </div>
+    </div>
+
+    <div id="p-profile" class="page">
+        <div class="profile-container">
+            <div class="avatar-circle">👤</div>
+            <h2 id="u-profile-name" style="margin: 0; font-size: 26px;">Пайдаланушы</h2>
+            <p style="color: #38bdf8; margin: 5px 0; font-weight: 700;">ID: <span id="u-id">000000</span></p>
+            <div class="stats-grid">
+                <div class="stat-box"><div style="font-size: 20px;">⚡</div><div style="font-weight: 900; font-size: 20px;" id="p-xp">0</div><div style="font-size: 11px; opacity: 0.6; font-weight: 700;">XP ҰПАЙ</div></div>
+                <div class="stat-box"><div style="font-size: 20px;">🏆</div><div style="font-weight: 900; font-size: 20px;" id="p-level">1</div><div style="font-size: 11px; opacity: 0.6; font-weight: 700;">ДЕҢГЕЙ</div></div>
             </div>
-        </div>
-        <div style="height: 50px;"></div> 
-    </div>
-
-    <div id="page-quiz" class="page">
-        <h2>⚡ УБТ КУИЗ</h2>
-        <div class="pass-card" style="text-align: center;">
-            <p>Информатика және Математика сұрақтары дайындалуда...</p>
-            <button class="action-btn" onclick="addXP(20)">Тест бастау (+20 XP)</button>
-        </div>
-    </div>
-
-    <div id="page-wardrobe" class="page">
-        <h2>👕 ГАРДЕРОБ</h2>
-        <div id="inventory-list">
-            <p>Киімдер жинағы жақында ашылады.</p>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="modal">
-        <div class="modal-card">
-            <div style="font-size: 50px; margin-bottom: 10px;">👨‍💻</div>
-            <h2 id="u-name" style="margin: 0;">Маман</h2>
-            <hr style="border: 0.5px solid #334155; margin: 20px 0;">
-            <p>🏅 Лига: <b id="u-league" style="color: var(--gold);">БРОНЗА</b></p>
-            <p>📏 Бойы: <b>190 см</b></p>
-            <p>⚡ Жалпы XP: <b id="m-xp">0</b></p>
-            <button class="action-btn" onclick="closeProfile()">Жабу</button>
+            <button onclick="nav('main', this)" style="width: 100%; padding: 18px; background: #38bdf8; border: none; color: #0f172a; border-radius: 15px; font-weight: 900; margin-top: 25px; cursor: pointer; font-family: 'Montserrat';">БАСТЫ БЕТКЕ</button>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-btn active-nav" onclick="nav('main', this)"><span>🏠 Басты</span></div>
-        <div class="nav-btn" onclick="nav('quiz', this)"><span>📝 Куиз</span></div>
-        <div class="nav-btn" onclick="nav('wardrobe', this)"><span>👕 Гардероб</span></div>
+        <div class="nav-btn active-nav" onclick="nav('main', this)"><span>🏠</span><span>Басты</span></div>
+        <div class="nav-btn" onclick="nav('quiz', this)"><span>📚</span><span>Тараулар</span></div>
+        <div class="nav-btn" onclick="nav('events', this)"><span>🏆</span><span>Ивенттер</span></div>
+        <div class="nav-btn" onclick="nav('items', this)"><span>🎒</span><span>Заттар</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // --- SUPABASE CONFIG ---
         const SB_URL = 'https://ipkxmxjvvirndgbzbowi.supabase.co';
-        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwa3hteGp2dmlybmRnYnpib3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTU1NDYsImV4cCI6MjA5MDAzMTU0Nn0.oqk1baE0K5ZpRD8CjbP4GVeGdoUpjZF-tL2iPFDqAVA'; // Supabase-тен алған Anon Key-ді осында қой
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwa3hteGp2dmlybmRnYnpib3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTU1NDYsImV4cCI6MjA5MDAzMTU0Nn0.oqk1baE0K5ZpRD8CjbP4GVeGdoUpjZF-tL2iPFDqAVA'; 
         const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-        // State
-        let userData = {
-            xp: 0,
-            league: 'Bronze',
-            skin: 'robot',
-            inventory: ['robot']
-        };
+        let userData = { xp: 0, league: 'Bronze' };
 
-        // Базадан деректерді жүктеу
         async function loadData() {
             const user = tg.initDataUnsafe.user;
-            if (!user) return;
-
-            document.getElementById('u-name').innerText = user.first_name;
-
-            let { data, error } = await supabaseClient
-                .from('users')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-
-            if (data) {
-                userData = data;
-            } else {
-                // Жаңа қолданушы болса қосу
-                await supabaseClient.from('users').insert([{ 
-                    id: user.id, 
-                    username: user.first_name, 
-                    xp: 0, 
-                    league: 'Bronze', 
-                    skin: 'robot',
-                    inventory: ['robot']
-                }]);
-            }
-            updateUI();
-        }
-
-        // Базаға сақтау
-        async function saveToDB() {
-            const user = tg.initDataUnsafe.user;
             if (user) {
-                await supabaseClient.from('users')
-                    .update({ 
-                        xp: userData.xp, 
-                        league: userData.league, 
-                        skin: userData.skin,
-                        inventory: userData.inventory 
-                    })
-                    .eq('id', user.id);
+                const name = user.first_name || "Пайдаланушы";
+                // Адамның атын барлық жерге қою
+                document.getElementById('u-top-name').innerText = name;
+                document.getElementById('u-welcome-name').innerText = name;
+                document.getElementById('u-profile-name').innerText = name;
+                document.getElementById('u-id').innerText = user.id;
+
+                let { data } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
+                if (data) {
+                    userData = data;
+                    updateUI();
+                }
             }
         }
 
         function updateUI() {
+            const level = Math.floor(userData.xp / 100) + 1;
             document.getElementById('xp-count').innerText = userData.xp;
-            document.getElementById('m-xp').innerText = userData.xp;
-            document.getElementById('u-league').innerText = userData.league.toUpperCase();
-            document.getElementById('level-txt').innerText = "Деңгей: " + Math.floor(userData.xp / 100 + 1);
-            document.getElementById('pass-progress').style.width = (userData.xp % 100) + "%";
-            document.getElementById('robot-display').src = userData.skin + ".webp";
+            document.getElementById('p-xp').innerText = userData.xp;
+            document.getElementById('u-level').innerText = level;
+            document.getElementById('p-level').innerText = level;
+            document.getElementById('u-league').innerText = userData.league || 'Bronze';
+            document.getElementById('pass-width').style.width = (userData.xp % 100) + '%';
         }
 
-        function clickRobot() {
-            addXP(5);
-            tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function addXP(amount) {
-            userData.xp += amount;
-            
-            // Лигаларды тексеру
-            if(userData.xp > 1000 && userData.league === 'Bronze') userData.league = 'Silver';
-            if(userData.xp > 5000 && userData.league === 'Silver') userData.league = 'Gold';
-
-            updateUI();
-            saveToDB(); // Базаға сақтау
-        }
-
-        function nav(pageId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-            el.classList.add('active-nav');
+        function nav(id, el) {
             tg.HapticFeedback.impactOccurred('medium');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('p-' + id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+            if(el && el.classList.contains('nav-btn')) el.classList.add('active-nav');
         }
 
-        function openProfile() {
-            document.getElementById('profile-modal').style.display = 'flex';
-            tg.HapticFeedback.impactOccurred('light');
+        function goTo(url) {
+            tg.HapticFeedback.notificationOccurred('success');
+            window.location.href = url; 
         }
 
-        function closeProfile() {
-            document.getElementById('profile-modal').style.display = 'none';
-        }
-
-        // Бастапқы жүктеу
         loadData();
     </script>
 </body>
