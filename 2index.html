@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>QANAT IT-Academy</title>
+    <title>QANAT IT-Academy | Final Beta</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg: #111827;
+            --bg: #0f172a;
             --card: #1e293b;
             --primary: #38bdf8;
             --gold: #facc15;
-            --nav-bg: rgba(30, 41, 59, 0.7);
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --platinum: #38bdf8;
+            --nav-bg: rgba(30, 41, 59, 0.8);
             --nav-active-bg: rgba(56, 189, 248, 0.15);
         }
 
@@ -29,91 +32,83 @@
         /* TOP BAR */
         .top-bar { 
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 20px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(56, 189, 248, 0.3); position: fixed; top: 0; width: 100%; z-index: 100; box-sizing: border-box; 
+            padding: 10px 20px; background: var(--nav-bg); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2); position: fixed; top: 0; width: 100%; z-index: 100; box-sizing: border-box; 
         }
 
         .profile-btn {
             display: flex; align-items: center; gap: 8px; background: var(--card);
-            padding: 5px 12px; border: 2px solid var(--primary); border-radius: 25px;
-            cursor: pointer; font-weight: 800; font-size: 13px;
+            padding: 6px 14px; border: 2px solid var(--primary); border-radius: 25px;
+            cursor: pointer; font-weight: 800; font-size: 13px; transition: 0.3s;
         }
         
-        /* Кішкентай аватарка стилі */
         .mini-avatar {
-            width: 22px; height: 22px; border-radius: 50%; object-fit: cover; background: var(--primary);
+            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: var(--primary);
             display: flex; align-items: center; justify-content: center; font-size: 12px; overflow: hidden;
         }
         .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .xp-badge { background: linear-gradient(45deg, var(--primary), #0ea5e9); padding: 6px 16px; border-radius: 20px; font-weight: 900; }
+        .xp-badge { background: linear-gradient(45deg, var(--primary), #0ea5e9); padding: 7px 18px; border-radius: 20px; font-weight: 900; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
 
-        .page { display: none; height: 100vh; padding: 80px 15px 120px 15px; overflow-y: auto; flex-direction: column; align-items: center; box-sizing: border-box; width: 100%; }
+        .page { display: none; height: 100vh; padding: 90px 20px 120px 20px; overflow-y: auto; flex-direction: column; align-items: center; box-sizing: border-box; width: 100%; }
         .active { display: flex; }
 
-        /* АВАТАРКА ШЕҢБЕРІ */
+        /* АВАТАРКА ЖӘНЕ ЭФФЕКТІЛЕР */
         .avatar-circle { 
-            width: 100px; height: 100px; 
-            background: linear-gradient(45deg, #38bdf8, #1d4ed8); 
-            border-radius: 50%; margin: 0 auto 15px; 
+            width: 110px; height: 110px; 
+            background: #1e293b; 
+            border-radius: 50%; margin: 0 auto 10px; 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 40px; border: 4px solid #1e293b; 
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            font-size: 45px; border: 4px solid #1e293b; 
             overflow: hidden; flex-shrink: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* ОСЫ ЖЕР МАҢЫЗДЫ: СУРЕТТІ ШЕКТЕУ */
-        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* QANAT PASS CARD */
-        .pass-card {
-            width: 100%; background: #262f3f; border-radius: 20px; padding: 20px; margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
-        }
-        .pass-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .pass-title { color: #facc15; font-weight: 900; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
-        .pass-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 15px; font-weight: 400; }
-        .pass-bar-bg { width: 100%; height: 12px; background: #1a1f2e; border-radius: 10px; overflow: hidden; }
-        .pass-progress { height: 100%; background: #facc15; width: 20%; box-shadow: 0 0 12px #facc15; }
+        /* ЛИГАЛАР (Glow Effects) */
+        .av-bronze { border-color: var(--bronze) !important; box-shadow: 0 0 20px rgba(205, 127, 50, 0.6); }
+        .av-silver { border-color: var(--silver) !important; box-shadow: 0 0 20px rgba(192, 192, 192, 0.6); }
+        .av-gold { border-color: var(--gold) !important; box-shadow: 0 0 25px rgba(250, 204, 21, 0.7); animation: gold-glow 2s infinite; }
+        .av-platinum { border-color: var(--platinum) !important; box-shadow: 0 0 30px rgba(56, 189, 248, 0.8); animation: plat-glow 1.5s infinite alternate; }
 
-        /* CATEGORY CARDS */
-        .category-card {
-            width: 100%; background: #1e293b; border-radius: 15px; margin-bottom: 12px; 
-            padding: 15px; display: flex; align-items: center; border-left: 6px solid var(--primary);
-            box-sizing: border-box; cursor: pointer; transition: 0.2s;
+        @keyframes gold-glow { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.02); } }
+        @keyframes plat-glow { from { box-shadow: 0 0 15px var(--platinum); } to { box-shadow: 0 0 35px var(--platinum); } }
+
+        /* BADGE */
+        .league-badge {
+            display: inline-block; padding: 5px 16px; border-radius: 12px;
+            font-size: 11px; font-weight: 900; text-transform: uppercase;
+            margin-top: 10px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .category-card:active { transform: scale(0.97); }
-        .category-icon { width: 45px; height: 45px; margin-right: 15px; flex-shrink: 0; }
-        .category-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .category-info h3 { margin: 0; font-size: 17px; font-weight: 800; }
-        .category-info p { margin: 4px 0 0 0; font-size: 12px; color: #94a3b8; font-weight: 400; }
+        .bg-bronze { background: rgba(205, 127, 50, 0.2); color: var(--bronze); border-color: var(--bronze); }
+        .bg-silver { background: rgba(192, 192, 192, 0.2); color: var(--silver); border-color: var(--silver); }
+        .bg-gold { background: rgba(250, 204, 21, 0.2); color: var(--gold); border-color: var(--gold); }
+        .bg-platinum { background: rgba(56, 189, 248, 0.2); color: var(--platinum); border-color: var(--platinum); }
+
+        /* UI ELEMENTS */
+        .pass-card { width: 100%; background: #1e293b; border-radius: 20px; padding: 22px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .pass-bar-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 10px; overflow: hidden; margin-top: 15px; }
+        .pass-progress { height: 100%; background: var(--gold); width: 0%; box-shadow: 0 0 15px var(--gold); transition: 1s ease; }
+
+        .category-card { width: 100%; background: #1e293b; border-radius: 18px; margin-bottom: 14px; padding: 18px; display: flex; align-items: center; border-left: 6px solid var(--primary); box-sizing: border-box; cursor: pointer; transition: 0.2s; }
+        .category-card:active { transform: scale(0.96); }
+
+        .item-slot { width: 100%; background: #1e293b; padding: 18px; border-radius: 18px; display: flex; align-items: center; margin-bottom: 12px; border: 1px solid rgba(56, 189, 248, 0.15); box-sizing: border-box; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 25px; }
+        .stat-box { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.03); }
 
         /* BOTTOM NAV */
         .bottom-nav { 
-            position: fixed; bottom: 20px; left: 15px; right: 15px; 
-            height: 75px; background: var(--nav-bg); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: fixed; bottom: 25px; left: 20px; right: 20px; 
+            height: 75px; background: var(--nav-bg); backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; align-items: center; 
-            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.08); 
-            z-index: 1000; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            padding: 0 10px;
+            border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 1000;
         }
-        
-        .nav-btn { 
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; width: 22%; height: 55px; 
-            color: #94a3b8; cursor: pointer; transition: all 0.3s ease;
-            border-radius: 18px;
-        }
-
-        .nav-icon { width: 22px; height: 22px; margin-bottom: 4px; filter: brightness(0.8); transition: 0.3s; }
-        .nav-btn span:last-child { font-size: 10px; font-weight: 800; }
-        .active-nav { background: var(--nav-active-bg); color: var(--primary); }
-        .active-nav .nav-icon { filter: none; transform: translateY(-2px); }
-
-        /* STATS & SLOTS */
-        .item-slot { width: 100%; background: #1e293b; padding: 15px; border-radius: 15px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid rgba(56, 189, 248, 0.2); box-sizing: border-box; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 20px; }
-        .stat-box { background: #1e293b; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 22%; height: 60px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
+        .nav-icon { width: 24px; height: 24px; margin-bottom: 5px; filter: brightness(0.7); }
+        .active-nav { color: var(--primary); background: var(--nav-active-bg); border-radius: 20px; }
+        .active-nav .nav-icon { filter: none; }
     </style>
 </head>
 <body>
@@ -121,76 +116,88 @@
     <div class="top-bar">
         <div class="profile-btn" onclick="nav('profile', this)">
             <div id="u-mini-avatar" class="mini-avatar">👤</div>
-            <span id="u-top-name">Профиль</span>
+            <span id="u-top-name">Жүктелуде...</span>
         </div>
         <div class="xp-badge">⚡ <span id="xp-count">0</span> XP</div>
     </div>
 
     <div id="p-main" class="page active">
-        <div id="u-home-avatar" class="avatar-circle" style="width: 80px; height: 80px; font-size: 30px;">👤</div>
+        <div id="u-home-avatar" class="avatar-circle">👤</div>
+        <h1 style="margin: 15px 0 5px 0; font-size: 28px; font-weight: 900;">Сәлем, <span id="u-welcome-name">Coder</span>!</h1>
+        <p style="opacity: 0.5; margin-bottom: 20px;">Бүгін жаңа деңгейге көтеріл!</p>
         
-        <h1 style="margin: 10px 0; font-size: 26px; text-align: center;">Қош келдің, <span id="u-welcome-name">Достым</span>!</h1>
         <div class="pass-card">
-            <div class="pass-header"><span style="font-size: 24px;">🏆</span><span class="pass-title">QANAT PASS</span></div>
-            <div class="pass-desc">Тапсырмаларды орындап, сыйлықтар ал!</div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--gold); font-weight: 900; font-size: 20px;">🏆 QANAT PASS</span>
+                <span id="pass-percent" style="font-size: 12px; font-weight: 800;">0%</span>
+            </div>
             <div class="pass-bar-bg"><div class="pass-progress" id="pass-width"></div></div>
         </div>
-        <div class="item-slot" style="margin-top: 20px;">
-            <div style="font-size: 30px; margin-right: 15px;">🚀</div>
-            <div><h4 style="margin:0; font-weight:800;">Деңгейің</h4><p style="margin:0; font-size:12px; color:var(--primary); font-weight:700;"><span id="u-league">Bronze</span> Лигасы | <span id="u-level">1</span> деңгей</p></div>
+
+        <div class="item-slot" style="margin-top: 25px;">
+            <div style="font-size: 35px; margin-right: 20px;">🚀</div>
+            <div>
+                <h4 style="margin:0; font-weight:900; font-size: 16px;">Ағымдағы статус</h4>
+                <p style="margin:4px 0 0 0; font-size:12px; color:var(--primary); font-weight:800;">
+                    <span id="u-league-text">Bronze</span> Лигасы | <span id="u-level-text">1</span> деңгей
+                </p>
+            </div>
         </div>
     </div>
 
     <div id="p-quiz" class="page">
-        <h2 style="margin-bottom: 20px; color: var(--primary); width: 100%; text-align: left;">Тарауды таңдаңыз</h2>
-        <div class="category-card" style="border-left-color: #ef4444;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"></div>
-            <div class="category-info"><h3>Санау жүйелері</h3><p>Екілік, сегіздік, он алтылық</p></div>
+        <h2 style="width: 100%; text-align: left; font-weight: 900;">Оқу бөлімдері</h2>
+        <div class="category-card" style="border-left-color: #ef4444;" onclick="goTo('quiz_1.html')">
+            <div style="font-size: 30px; margin-right: 15px;">🔢</div>
+            <div><h3 style="margin:0;">Санау жүйелері</h3><p style="margin:4px 0 0 0; font-size:12px; opacity:0.6;">Екілік, сегіздік, он алтылық</p></div>
         </div>
-        <div class="category-card" style="border-left-color: #3b82f6;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5661/5661135.png"></div>
-            <div class="category-info"><h3>Логикалық негіздер</h3><p>Және, Немесе, Емес амалдары</p></div>
+        <div class="category-card" style="border-left-color: #3b82f6;" onclick="goTo('quiz_2.html')">
+            <div style="font-size: 30px; margin-right: 15px;">🧠</div>
+            <div><h3 style="margin:0;">Логикалық негіздер</h3><p style="margin:4px 0 0 0; font-size:12px; opacity:0.6;">Амалдар мен кестелер</p></div>
         </div>
-        <div class="category-card" style="border-left-color: #1d4ed8;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png"></div>
-            <div class="category-info"><h3>Python Про</h3><p>Циклдер мен функциялар</p></div>
-        </div>
-        <div class="category-card" style="border-left-color: #22c55e;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/732/732220.png"></div>
-            <div class="category-info"><h3>MS Excel</h3><p>Кестелер және формулалар</p></div>
-        </div>
-        <div class="category-card" style="border-left-color: #f97316;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/1051/1051277.png"></div>
-            <div class="category-info"><h3>Web-дизайн</h3><p>HTML5, CSS3 негіздері</p></div>
-        </div>
-        <div class="category-card" style="border-left-color: #f59e0b;" onclick="goTo('index.html')">
-            <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png"></div>
-            <div class="category-info"><h3>Деректер қоры</h3><p>MySQL сұраныстары</p></div>
+        <div class="category-card" style="border-left-color: #22c55e;" onclick="goTo('quiz_3.html')">
+            <div style="font-size: 30px; margin-right: 15px;">🐍</div>
+            <div><h3 style="margin:0;">Python Негіздері</h3><p style="margin:4px 0 0 0; font-size:12px; opacity:0.6;">Синтаксис пен айнымалылар</p></div>
         </div>
     </div>
 
     <div id="p-events" class="page">
-        <h2 style="margin-bottom: 20px; color: #facc15; width: 100%;">Жарыстар</h2>
-        <div class="item-slot" style="border-left: 5px solid #facc15;">
+        <h2 style="width: 100%; text-align: left; font-weight: 900; color: var(--gold);">Турнирлер</h2>
+        <div class="item-slot" style="border-left: 6px solid var(--gold);">
             <div style="font-size: 30px; margin-right: 15px;">📅</div>
-            <div><h4 style="margin:0; font-weight:800;">Апталық Турнир</h4><p style="margin:0; font-size:12px; opacity:0.7;">Жексенбі, 20:00</p></div>
+            <div><h4 style="margin:0; font-weight:900;">Апталық Сprint</h4><p style="margin:4px 0 0 0; font-size:12px; opacity:0.7;">Басталуы: Жексенбі, 18:00</p></div>
         </div>
-    </div>
-
-    <div id="p-items" class="page">
-        <h2 style="margin-bottom: 20px; color: #22c55e; width: 100%;">Заттарым</h2>
-        <div class="item-slot"><div style="font-size: 30px; margin-right: 15px;">🎒</div><div><h4 style="margin:0; font-weight:800;">Бастапқы пакет</h4><p style="margin:0; font-size:12px; opacity:0.7;">Заттар саны: 1</p></div></div>
+        <div class="item-slot" style="opacity: 0.5;">
+            <div style="font-size: 30px; margin-right: 15px;">🔒</div>
+            <div><h4 style="margin:0; font-weight:900;">Жабық Хакатон</h4><p style="margin:4px 0 0 0; font-size:12px; opacity:0.7;">Тек Gold лигасы үшін</p></div>
+        </div>
     </div>
 
     <div id="p-profile" class="page">
         <div id="u-main-avatar" class="avatar-circle">👤</div>
-        <h2 id="u-profile-name" style="margin: 0; font-size: 24px;">Пайдаланушы</h2>
-        <p style="color: #38bdf8; margin: 5px 0; font-weight: 700;">ID: <span id="u-id">000000</span></p>
+        <h2 id="u-profile-name" style="margin: 0; font-size: 26px; font-weight: 900;">Пайдаланушы</h2>
+        <p style="color: #94a3b8; margin: 8px 0 0 0; font-size: 14px; font-weight: 700;">ID: <span id="u-id">000000000</span></p>
+        <div id="u-league-badge" class="league-badge">Bronze League</div>
+
         <div class="stats-grid">
-            <div class="stat-box"><div style="font-size: 20px;">⚡</div><div style="font-weight: 900;" id="p-xp">0</div><div style="font-size: 10px; opacity: 0.6;">XP</div></div>
-            <div class="stat-box"><div style="font-size: 20px;">🏆</div><div style="font-weight: 900;" id="p-level">1</div><div style="font-size: 10px; opacity: 0.6;">ДЕҢГЕЙ</div></div>
+            <div class="stat-box">
+                <div style="font-size: 25px; margin-bottom: 5px;">⚡</div>
+                <div style="font-weight: 900; font-size: 22px;" id="p-xp">0</div>
+                <div style="font-size: 10px; opacity: 0.6; font-weight: 800;">ЖАЛПЫ XP</div>
+            </div>
+            <div class="stat-box">
+                <div style="font-size: 25px; margin-bottom: 5px;">🏆</div>
+                <div style="font-weight: 900; font-size: 22px;" id="p-level">1</div>
+                <div style="font-size: 10px; opacity: 0.6; font-weight: 800;">ДЕҢГЕЙ</div>
+            </div>
         </div>
-        <button onclick="nav('main')" style="width: 100%; padding: 15px; background: #38bdf8; border: none; border-radius: 12px; font-weight: 900; margin-top: 20px; font-family: 'Montserrat'; color: white;">Артқа</button>
+        
+        <div class="item-slot" style="margin-top: 20px; border-color: rgba(255,255,255,0.05); background: transparent;">
+            <div style="font-size: 24px; margin-right: 15px;">🎒</div>
+            <div style="text-align: left;"><h4 style="margin:0; font-size: 14px;">Инвентарь</h4><p style="margin:2px 0 0 0; font-size:11px; opacity:0.5;">Әзірге заттар жоқ</p></div>
+        </div>
+        
+        <button onclick="nav('main')" style="width: 100%; padding: 18px; background: #38bdf8; border: none; border-radius: 15px; font-weight: 900; margin-top: 25px; color: white; box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);">БАСТЫ БЕТКЕ</button>
     </div>
 
     <div class="bottom-nav">
@@ -203,14 +210,15 @@
         <div class="nav-btn" onclick="nav('events', this)">
             <img src="https://cdn-icons-png.flaticon.com/512/3112/3112733.png" class="nav-icon"><span>Ивенттер</span>
         </div>
-        <div class="nav-btn" onclick="nav('items', this)">
-            <img src="https://cdn-icons-png.flaticon.com/512/2907/2907150.png" class="nav-icon"><span>Заттар</span>
+        <div class="nav-btn" onclick="nav('profile', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" class="nav-icon"><span>Профиль</span>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.enableClosingConfirmation();
 
         const SB_URL = 'https://ipkxmxjvvirndgbzbowi.supabase.co';
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwa3hteGp2dmlybmRnYnpib3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTU1NDYsImV4cCI6MjA5MDAzMTU0Nn0.oqk1baE0K5ZpRD8CjbP4GVeGdoUpjZF-tL2iPFDqAVA'; 
@@ -218,64 +226,105 @@
 
         let userData = { xp: 0, league: 'Bronze' };
 
-        async function loadData() {
+        async function initApp() {
             const user = tg.initDataUnsafe.user;
-            if (user) {
-                const name = user.first_name || "Пайдаланушы";
-                const photo = user.photo_url;
+            if (!user) return;
 
-                document.getElementById('u-top-name').innerText = name;
-                document.getElementById('u-welcome-name').innerText = name;
-                document.getElementById('u-profile-name').innerText = name;
-                document.getElementById('u-id').innerText = user.id;
+            // UI-ға атын жазу
+            const name = user.first_name || "Coder";
+            document.getElementById('u-top-name').innerText = name;
+            document.getElementById('u-welcome-name').innerText = name;
+            document.getElementById('u-profile-name').innerText = name;
+            document.getElementById('u-id').innerText = user.id;
 
-                const mainAvatar = document.getElementById('u-main-avatar');
-                const miniAvatar = document.getElementById('u-mini-avatar');
-                const homeAvatar = document.getElementById('u-home-avatar');
+            // Аватаркаларды қою
+            const photo = user.photo_url;
+            const avatarElements = [
+                document.getElementById('u-main-avatar'),
+                document.getElementById('u-mini-avatar'),
+                document.getElementById('u-home-avatar')
+            ];
 
-                if (photo) {
-                    const imgHtml = `<img src="${photo}" alt="avatar">`;
-                    mainAvatar.innerHTML = imgHtml;
-                    miniAvatar.innerHTML = imgHtml;
-                    if(homeAvatar) homeAvatar.innerHTML = imgHtml;
-                } else {
-                    const firstChar = name.charAt(0).toUpperCase();
-                    mainAvatar.innerText = firstChar;
-                    miniAvatar.innerText = firstChar;
-                    if(homeAvatar) homeAvatar.innerText = firstChar;
-                }
+            avatarElements.forEach(el => {
+                if(!el) return;
+                if(photo) el.innerHTML = `<img src="${photo}" alt="avatar">`;
+                else el.innerText = name.charAt(0).toUpperCase();
+            });
 
-                let { data } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
-                if (data) { userData = data; updateUI(); }
+            // Мәліметтерді тарту
+            let { data, error } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
+            
+            if (data) { 
+                userData = data; 
+            } else {
+                // Жаңа юзер болса базаға қосу (Опционалды)
+                console.log("Юзер табылмады");
             }
+            updateUI();
         }
 
         function updateUI() {
-            const level = Math.floor(userData.xp / 100) + 1;
-            document.getElementById('xp-count').innerText = userData.xp;
-            document.getElementById('p-xp').innerText = userData.xp;
-            document.getElementById('u-level').innerText = level;
+            const xp = userData.xp || 0;
+            const level = Math.floor(xp / 100) + 1;
+            const league = userData.league || 'Bronze';
+            const leagueLower = league.toLowerCase();
+            const progress = xp % 100;
+
+            // Мәтіндер
+            document.getElementById('xp-count').innerText = xp;
+            document.getElementById('p-xp').innerText = xp;
+            document.getElementById('u-level-text').innerText = level;
             document.getElementById('p-level').innerText = level;
-            document.getElementById('u-league').innerText = userData.league || 'Bronze';
-            document.getElementById('pass-width').style.width = (userData.xp % 100) + '%';
+            document.getElementById('u-league-text').innerText = league;
+            document.getElementById('pass-percent').innerText = progress + '%';
+            
+            // Progress Bar
+            document.getElementById('pass-width').style.width = progress + '%';
+
+            // League Badge
+            const badge = document.getElementById('u-league-badge');
+            badge.innerText = league + " League";
+            badge.className = 'league-badge bg-' + leagueLower;
+
+            // Аватарка эффектілері
+            const avMain = document.getElementById('u-main-avatar');
+            const avHome = document.getElementById('u-home-avatar');
+            [avMain, avHome].forEach(av => {
+                if(av) {
+                    av.classList.remove('av-bronze', 'av-silver', 'av-gold', 'av-platinum');
+                    av.classList.add('av-' + leagueLower);
+                }
+            });
         }
 
         function nav(id, el) {
+            // Виброотклик қосу
             tg.HapticFeedback.impactOccurred('medium');
+            
+            // Беттерді ауыстыру
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('p-' + id).classList.add('active');
             
+            // Навигация түсін өзгерту
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-            if(el && el.classList.contains('nav-btn')) el.classList.add('active-nav');
-            else if(id === 'main') document.querySelectorAll('.nav-btn')[0].classList.add('active-nav');
+            
+            // Егер батырма арқылы басылса
+            if(el) {
+                el.classList.add('active-nav');
+            } else {
+                // Егер JS арқылы шақырылса (мысалы "Артқа" батырмасы)
+                const navIndex = { 'main': 0, 'quiz': 1, 'events': 2, 'profile': 3 };
+                document.querySelectorAll('.nav-btn')[navIndex[id]].classList.add('active-nav');
+            }
         }
 
         function goTo(url) {
             tg.HapticFeedback.notificationOccurred('success');
-            window.location.href = url; 
+            window.location.href = url;
         }
 
-        loadData();
+        // Қосымшаны іске қосу
+        initApp();
     </script>
 </body>
 </html>
