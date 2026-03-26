@@ -13,13 +13,15 @@
             --card: #1e293b;
             --primary: #38bdf8;
             --gold: #facc15;
+            --nav-bg: rgba(30, 41, 59, 0.7);
+            --nav-active-bg: rgba(56, 189, 248, 0.15);
         }
 
         body { 
             margin: 0; 
             background: var(--bg); 
             color: white; 
-            font-family: 'Montserrat', sans-serif; /* Шрифт ауыстырылды */
+            font-family: 'Montserrat', sans-serif; 
             overflow: hidden; 
             -webkit-tap-highlight-color: transparent; 
         }
@@ -33,14 +35,32 @@
 
         .profile-btn {
             display: flex; align-items: center; gap: 8px; background: var(--card);
-            padding: 8px 16px; border: 2px solid var(--primary); border-radius: 25px;
-            cursor: pointer; font-weight: 800; font-size: 14px;
+            padding: 5px 12px; border: 2px solid var(--primary); border-radius: 25px;
+            cursor: pointer; font-weight: 800; font-size: 13px;
+        }
+        
+        /* Кішкентай аватарка стилі */
+        .mini-avatar {
+            width: 22px; height: 22px; border-radius: 50%; object-fit: cover; background: var(--primary);
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
         }
 
         .xp-badge { background: linear-gradient(45deg, var(--primary), #0ea5e9); padding: 6px 16px; border-radius: 20px; font-weight: 900; }
 
         .page { display: none; height: 100vh; padding: 80px 15px 120px 15px; overflow-y: auto; flex-direction: column; align-items: center; box-sizing: border-box; width: 100%; }
         .active { display: flex; }
+
+        /* АВАТАРКА ШЕҢБЕРІ */
+        .avatar-circle { 
+            width: 100px; height: 100px; 
+            background: linear-gradient(45deg, #38bdf8, #1d4ed8); 
+            border-radius: 50%; margin: 0 auto 15px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 40px; border: 4px solid #1e293b; 
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            overflow: hidden;
+        }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
         /* QANAT PASS CARD */
         .pass-card {
@@ -57,45 +77,58 @@
         .category-card {
             width: 100%; background: #1e293b; border-radius: 15px; margin-bottom: 12px; 
             padding: 15px; display: flex; align-items: center; border-left: 6px solid var(--primary);
-            box-sizing: border-box;
+            box-sizing: border-box; cursor: pointer; transition: 0.2s;
         }
-        .category-icon { width: 50px; height: 50px; margin-right: 15px; flex-shrink: 0; }
+        .category-card:active { transform: scale(0.97); }
+        .category-icon { width: 45px; height: 45px; margin-right: 15px; flex-shrink: 0; }
         .category-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .category-info h3 { margin: 0; font-size: 18px; font-weight: 800; }
-        .category-info p { margin: 4px 0 0 0; font-size: 13px; color: #94a3b8; font-weight: 400; }
+        .category-info h3 { margin: 0; font-size: 17px; font-weight: 800; }
+        .category-info p { margin: 4px 0 0 0; font-size: 12px; color: #94a3b8; font-weight: 400; }
 
         /* BOTTOM NAV */
         .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; right: 0; height: 75px; 
-            background: #1e293b; display: flex; justify-content: space-around; 
-            align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100;
+            position: fixed; bottom: 20px; left: 15px; right: 15px; 
+            height: 75px; background: var(--nav-bg); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; align-items: center; 
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.08); 
+            z-index: 1000; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            padding: 0 10px;
         }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94a3b8; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .nav-btn span:first-child { font-size: 22px; }
-        .active-nav { color: #38bdf8; transform: translateY(-3px); }
+        
+        .nav-btn { 
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; width: 22%; height: 55px; 
+            color: #94a3b8; cursor: pointer; transition: all 0.3s ease;
+            border-radius: 18px;
+        }
 
-        /* PROFILE */
-        .profile-container { width: 100%; text-align: center; }
-        .avatar-circle { width: 100px; height: 100px; background: linear-gradient(45deg, #38bdf8, #1d4ed8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 45px; border: 4px solid #1e293b; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        .nav-icon { width: 22px; height: 22px; margin-bottom: 4px; filter: brightness(0.8); transition: 0.3s; }
+        .nav-btn span:last-child { font-size: 10px; font-weight: 800; }
+        .active-nav { background: var(--nav-active-bg); color: var(--primary); }
+        .active-nav .nav-icon { filter: none; transform: translateY(-2px); }
+
+        /* STATS & SLOTS */
+        .item-slot { width: 100%; background: #1e293b; padding: 15px; border-radius: 15px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid rgba(56, 189, 248, 0.2); box-sizing: border-box; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 20px; }
-        .stat-box { background: #1e293b; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-
-        .item-slot { width: 100%; background: #1e293b; padding: 15px; border-radius: 15px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid rgba(56, 189, 248, 0.2); }
-        h1, h2 { font-weight: 900; letter-spacing: -0.5px; }
+        .stat-box { background: #1e293b; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div class="profile-btn" onclick="nav('profile', this)">👤 <span id="u-top-name">Профиль</span></div>
+        <div class="profile-btn" onclick="nav('profile', this)">
+            <div id="u-mini-avatar" class="mini-avatar">👤</div>
+            <span id="u-top-name">Профиль</span>
+        </div>
         <div class="xp-badge">⚡ <span id="xp-count">0</span> XP</div>
     </div>
 
     <div id="p-main" class="page active">
-        <h1 style="margin: 10px 0; font-size: 28px;">Қош келдің, <span id="u-welcome-name">Достым</span>!</h1>
+        <h1 style="margin: 10px 0; font-size: 26px;">Қош келдің, <span id="u-welcome-name">Достым</span>!</h1>
         <div class="pass-card">
             <div class="pass-header"><span style="font-size: 24px;">🏆</span><span class="pass-title">QANAT PASS</span></div>
-            <div class="pass-desc">Тапсырмаларды орындап, эксклюзивті сыйлықтар ал!</div>
+            <div class="pass-desc">Тапсырмаларды орындап, сыйлықтар ал!</div>
             <div class="pass-bar-bg"><div class="pass-progress" id="pass-width"></div></div>
         </div>
         <div class="item-slot" style="margin-top: 20px;">
@@ -105,33 +138,27 @@
     </div>
 
     <div id="p-quiz" class="page">
-        <h2 style="margin-bottom: 20px; color: var(--primary); width: 100%;">Тарауды таңдаңыз</h2>
-        
+        <h2 style="margin-bottom: 20px; color: var(--primary); width: 100%; text-align: left;">Тарауды таңдаңыз</h2>
         <div class="category-card" style="border-left-color: #ef4444;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"></div>
             <div class="category-info"><h3>Санау жүйелері</h3><p>Екілік, сегіздік, он алтылық</p></div>
         </div>
-
         <div class="category-card" style="border-left-color: #3b82f6;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5661/5661135.png"></div>
             <div class="category-info"><h3>Логикалық негіздер</h3><p>Және, Немесе, Емес амалдары</p></div>
         </div>
-
         <div class="category-card" style="border-left-color: #1d4ed8;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png"></div>
             <div class="category-info"><h3>Python Про</h3><p>Циклдер мен функциялар</p></div>
         </div>
-
         <div class="category-card" style="border-left-color: #22c55e;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/732/732220.png"></div>
             <div class="category-info"><h3>MS Excel</h3><p>Кестелер және формулалар</p></div>
         </div>
-
         <div class="category-card" style="border-left-color: #f97316;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/1051/1051277.png"></div>
             <div class="category-info"><h3>Web-дизайн</h3><p>HTML5, CSS3 негіздері</p></div>
         </div>
-
         <div class="category-card" style="border-left-color: #f59e0b;" onclick="goTo('index.html')">
             <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png"></div>
             <div class="category-info"><h3>Деректер қоры</h3><p>MySQL сұраныстары</p></div>
@@ -148,30 +175,33 @@
 
     <div id="p-items" class="page">
         <h2 style="margin-bottom: 20px; color: #22c55e; width: 100%;">Заттарым</h2>
-        <div class="item-slot">
-            <div style="font-size: 30px; margin-right: 15px;">🎒</div>
-            <div><h4 style="margin:0; font-weight:800;">Бастапқы пакет</h4><p style="margin:0; font-size:12px; opacity:0.7;">Қолда бар заттар: 1</p></div>
-        </div>
+        <div class="item-slot"><div style="font-size: 30px; margin-right: 15px;">🎒</div><div><h4 style="margin:0; font-weight:800;">Бастапқы пакет</h4><p style="margin:0; font-size:12px; opacity:0.7;">Заттар саны: 1</p></div></div>
     </div>
 
     <div id="p-profile" class="page">
-        <div class="profile-container">
-            <div class="avatar-circle">👤</div>
-            <h2 id="u-profile-name" style="margin: 0; font-size: 26px;">Пайдаланушы</h2>
-            <p style="color: #38bdf8; margin: 5px 0; font-weight: 700;">ID: <span id="u-id">000000</span></p>
-            <div class="stats-grid">
-                <div class="stat-box"><div style="font-size: 20px;">⚡</div><div style="font-weight: 900; font-size: 20px;" id="p-xp">0</div><div style="font-size: 11px; opacity: 0.6; font-weight: 700;">XP ҰПАЙ</div></div>
-                <div class="stat-box"><div style="font-size: 20px;">🏆</div><div style="font-weight: 900; font-size: 20px;" id="p-level">1</div><div style="font-size: 11px; opacity: 0.6; font-weight: 700;">ДЕҢГЕЙ</div></div>
-            </div>
-            <button onclick="nav('main', this)" style="width: 100%; padding: 18px; background: #38bdf8; border: none; color: #0f172a; border-radius: 15px; font-weight: 900; margin-top: 25px; cursor: pointer; font-family: 'Montserrat';">БАСТЫ БЕТКЕ</button>
+        <div id="u-main-avatar" class="avatar-circle">👤</div>
+        <h2 id="u-profile-name" style="margin: 0; font-size: 24px;">Пайдаланушы</h2>
+        <p style="color: #38bdf8; margin: 5px 0; font-weight: 700;">ID: <span id="u-id">000000</span></p>
+        <div class="stats-grid">
+            <div class="stat-box"><div style="font-size: 20px;">⚡</div><div style="font-weight: 900;" id="p-xp">0</div><div style="font-size: 10px; opacity: 0.6;">XP</div></div>
+            <div class="stat-box"><div style="font-size: 20px;">🏆</div><div style="font-weight: 900;" id="p-level">1</div><div style="font-size: 10px; opacity: 0.6;">ДЕҢГЕЙ</div></div>
         </div>
+        <button onclick="nav('main')" style="width: 100%; padding: 15px; background: #38bdf8; border: none; border-radius: 12px; font-weight: 900; margin-top: 20px; font-family: 'Montserrat';">Артқа</button>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-btn active-nav" onclick="nav('main', this)"><span>🏠</span><span>Басты</span></div>
-        <div class="nav-btn" onclick="nav('quiz', this)"><span>📚</span><span>Тараулар</span></div>
-        <div class="nav-btn" onclick="nav('events', this)"><span>🏆</span><span>Ивенттер</span></div>
-        <div class="nav-btn" onclick="nav('items', this)"><span>🎒</span><span>Заттар</span></div>
+        <div class="nav-btn active-nav" onclick="nav('main', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png" class="nav-icon"><span>Басты</span>
+        </div>
+        <div class="nav-btn" onclick="nav('quiz', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/3503/3503827.png" class="nav-icon"><span>Тараулар</span>
+        </div>
+        <div class="nav-btn" onclick="nav('events', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/3112/3112733.png" class="nav-icon"><span>Ивенттер</span>
+        </div>
+        <div class="nav-btn" onclick="nav('items', this)">
+            <img src="https://cdn-icons-png.flaticon.com/512/2907/2907150.png" class="nav-icon"><span>Заттар</span>
+        </div>
     </div>
 
     <script>
@@ -188,17 +218,30 @@
             const user = tg.initDataUnsafe.user;
             if (user) {
                 const name = user.first_name || "Пайдаланушы";
-                // Адамның атын барлық жерге қою
+                const photo = user.photo_url;
+
+                // Есімдерді қою
                 document.getElementById('u-top-name').innerText = name;
                 document.getElementById('u-welcome-name').innerText = name;
                 document.getElementById('u-profile-name').innerText = name;
                 document.getElementById('u-id').innerText = user.id;
 
-                let { data } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
-                if (data) {
-                    userData = data;
-                    updateUI();
+                // Аватаркаларды қою
+                const mainAvatar = document.getElementById('u-main-avatar');
+                const miniAvatar = document.getElementById('u-mini-avatar');
+
+                if (photo) {
+                    const imgHtml = `<img src="${photo}" alt="avatar">`;
+                    mainAvatar.innerHTML = imgHtml;
+                    miniAvatar.innerHTML = imgHtml;
+                } else {
+                    const firstChar = name.charAt(0).toUpperCase();
+                    mainAvatar.innerText = firstChar;
+                    miniAvatar.innerText = firstChar;
                 }
+
+                let { data } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
+                if (data) { userData = data; updateUI(); }
             }
         }
 
@@ -216,8 +259,10 @@
             tg.HapticFeedback.impactOccurred('medium');
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('p-' + id).classList.add('active');
+            
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
             if(el && el.classList.contains('nav-btn')) el.classList.add('active-nav');
+            else if(id === 'main') document.querySelectorAll('.nav-btn')[0].classList.add('active-nav');
         }
 
         function goTo(url) {
