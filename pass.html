@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>QANAT PASS</title>
     <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
     <style>
         :root {
             --bg: #000000;
@@ -16,13 +19,12 @@
 
         body { 
             margin: 0; background: var(--bg); color: white; 
-            font-family: 'Golos Text', sans-serif; /* Ең тұрақты шрифт */
+            font-family: 'Golos Text', sans-serif;
             -webkit-font-smoothing: antialiased;
             background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000 100%);
             min-height: 100vh; padding-bottom: 140px;
         }
 
-        /* HEADER */
         .header {
             position: sticky; top: 0; z-index: 100; padding: 15px 20px;
             display: flex; align-items: center; justify-content: space-between;
@@ -44,14 +46,12 @@
 
         .pass-container { padding: 30px 15px; max-width: 500px; margin: 0 auto; }
 
-        /* TITLES (ENGLISH) */
         .pass-titles {
             display: grid; grid-template-columns: 1fr 50px 1fr;
             text-align: center; margin-bottom: 30px;
             font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #555;
         }
 
-        /* TIERS */
         .tier-row {
             display: grid; grid-template-columns: 1fr 50px 1fr;
             gap: 15px; align-items: center; margin-bottom: 25px;
@@ -72,17 +72,18 @@
 
         .lock-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); border-radius: 20px;
+            background: rgba(0, 0, 0, 0.6); border-radius: 20px;
             display: flex; align-items: center; justify-content: center;
-            z-index: 5; font-size: 18px; color: rgba(255,255,255,0.2);
+            z-index: 5; font-size: 18px; color: rgba(255,255,255,0.4);
+            transition: 0.5s;
         }
 
         .level-num { font-size: 16px; font-weight: 900; color: #333; text-align: center; }
 
-        /* FOOTER BUTTON (GOLD) */
         .footer-buy {
             position: fixed; bottom: 0; width: 100%; padding: 30px 20px;
             background: linear-gradient(to top, #000 80%, transparent); z-index: 200;
+            box-sizing: border-box;
         }
         
         .buy-btn {
@@ -96,7 +97,7 @@
 <body>
 
     <div class="header">
-        <button class="back-btn" onclick="location.href='2index.html'">АРТҚА</button>
+        <button class="back-btn" onclick="location.href='index.html'">АРТҚА</button>
         <div class="main-title">QANAT PASS</div>
         <div style="width: 40px;"></div>
     </div>
@@ -108,15 +109,23 @@
             <div style="color: var(--gold-text);">PREMIUM</div>
         </div>
 
-        <div id="pass-content">
-            </div>
+        <div id="pass-content"></div>
     </div>
 
     <div class="footer-buy" id="footer-buy">
-        <button class="buy-btn" onclick="activatePremium()">БЕЛСЕНДІРУ — 💎 300</button>
+        <button class="buy-btn" id="btn-action" onclick="activatePremium()">БЕЛСЕНДІРУ — 💎 300</button>
     </div>
 
     <script>
+        const tg = window.Telegram.WebApp;
+        
+        // SUPABASE КОНФИГУРАЦИЯСЫ (Сенің мәліметтерің)
+        const SB_URL = 'https://ipkxmxjvvirndgbzbowi.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwa3hteGp2dmlybmRnYnpib3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTU1NDYsImV4cCI6MjA5MDAzMTU0Nn0.oqk1baE0K5ZpRD8CjbP4GVeGdoUpjZF-tL2iPFDqAVA'; 
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+        let userData = null;
+
         const rewards = [
             { id: 1, f: "50 XP", fi: "https://i.ibb.co/L9pZ4Xz/xp.png", p: "MEGA CASE", pi: "https://i.ibb.co/N2L8HkS/mega-box.png" },
             { id: 2, f: "КЕЙС", fi: "https://cdn-icons-png.flaticon.com/512/679/679821.png", p: "GOLD SKIN", pi: "https://cdn-icons-png.flaticon.com/512/924/924915.png" },
@@ -129,6 +138,70 @@
             { id: 9, f: "300 XP", fi: "https://i.ibb.co/L9pZ4Xz/xp.png", p: "1000 XP", pi: "https://i.ibb.co/L9pZ4Xz/xp.png" },
             { id: 10, f: "ULTRA BOX", fi: "https://i.ibb.co/N2L8HkS/mega-box.png", p: "LEGEND AVATAR", pi: "https://i.ibb.co/vip-skin.png" }
         ];
+
+        // 1. ПАЙДАЛАНУШЫНЫ ТЕКСЕРУ
+        async function checkStatus() {
+            const user = tg.initDataUnsafe.user;
+            if(!user) return;
+
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                userData = data;
+                if (userData.is_pass_active) {
+                    applyPremiumUI();
+                }
+            }
+        }
+
+        // 2. PREMIUM-ДЫ ЭКРАНДА КӨРСЕТУ
+        function applyPremiumUI() {
+            const locks = document.querySelectorAll('.lock-overlay');
+            locks.forEach(lock => lock.remove());
+            
+            document.getElementById('footer-buy').innerHTML = 
+                '<div style="text-align:center; font-weight:800; color:var(--gold-text); font-size:12px; letter-spacing:2px; padding-bottom:10px;">PREMIUM ACTIVE ✅</div>';
+        }
+
+        // 3. САТЫП АЛУ ФУНКЦИЯСЫ
+        async function activatePremium() {
+            const user = tg.initDataUnsafe.user;
+            if(!userData) return;
+
+            // Валютаны тексеру (мысалы 300 gems керек болса)
+            if((userData.gems || 0) < 300) {
+                tg.HapticFeedback.notificationOccurred('error');
+                alert("Кристалл жеткіліксіз! 💎");
+                return;
+            }
+
+            if(confirm("Premium-ды 300 кристалға белсендіресіз бе?")) {
+                tg.HapticFeedback.impactOccurred('heavy');
+                
+                const newGems = userData.gems - 300;
+
+                // Базада жаңарту
+                const { error } = await supabaseClient
+                    .from('users')
+                    .update({ 
+                        is_pass_active: true,
+                        gems: newGems 
+                    })
+                    .eq('id', user.id);
+
+                if (!error) {
+                    tg.HapticFeedback.notificationOccurred('success');
+                    applyPremiumUI();
+                    alert("Құттықтаймыз! QANAT PASS іске қосылды!");
+                } else {
+                    alert("Қате: " + error.message);
+                }
+            }
+        }
 
         function renderPass() {
             const container = document.getElementById('pass-content');
@@ -151,19 +224,9 @@
             });
         }
 
-        function activatePremium() {
-            if(confirm("Premium-ды 300 кристалға белсендіресіз бе?")) {
-                const locks = document.querySelectorAll('.lock-overlay');
-                locks.forEach(lock => {
-                    lock.style.opacity = '0';
-                    setTimeout(() => lock.remove(), 500);
-                });
-                document.getElementById('footer-buy').innerHTML = 
-                    '<div style="text-align:center; font-weight:800; color:var(--gold-text); font-size:12px; letter-spacing:2px;">PREMIUM ACTIVE ✅</div>';
-            }
-        }
-
+        // Іске қосу
         renderPass();
+        checkStatus();
     </script>
 </body>
 </html>
