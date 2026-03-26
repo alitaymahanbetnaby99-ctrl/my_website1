@@ -300,7 +300,7 @@
             });
 
             // Мәліметтерді тарту
-            let { data, error } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
+            let { data, error } = await supabaseClient.from('users').select('*').eq('id', user.id).single();
            // ЖАҢА КОДТЫ ОСЫ ЖЕРГЕ ҚОЙ
 if (data) { 
     userData = data; 
@@ -309,7 +309,7 @@ if (data) {
     const { data: newUser, error: insertError } = await supabaseClient
         .from('users')
         .insert([{ 
-            idd: user.id, 
+            id: user.id, 
             username: user.first_name || "Coder", 
             xp: 0, 
             league: 'Bronze' 
