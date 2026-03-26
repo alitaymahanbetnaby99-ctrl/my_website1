@@ -86,7 +86,16 @@
         .bg-platinum { background: rgba(56, 189, 248, 0.2); color: var(--platinum); border-color: var(--platinum); }
 
         /* UI ELEMENTS */
-        .pass-card { width: 95%; background: #1e293b; border-radius: 20px; padding: 22px; margin-top: 15px; border: 1px solid rgba(255, 215, 0); }
+        /* ЖАҢАРТЫЛҒАН КОД: */
+.pass-card { 
+    width: 95%; 
+    background: #1e293b; 
+    border-radius: 20px; 
+    padding: 38px 22px; /* 35px - жоғары-төмен, 22px - оң-сол */
+    margin-top: 15px; 
+    border: 1px solid rgba(255, 215, 0); 
+    cursor: pointer;
+}
         .pass-bar-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 10px; overflow: hidden; margin-top: 15px; }
         .pass-progress { height: 100%; background: var(--gold); width: 0%; box-shadow: 0 0 15px var(--gold); transition: 1s ease; }
 
@@ -126,13 +135,54 @@
         <h1 style="margin: 15px 0 5px 0; font-size: 28px; font-weight: 900;">Сәлем, <span id="u-welcome-name">Coder</span>!</h1>
         <p style="opacity: 0.5; margin-bottom: 20px;">Бүгін жаңа деңгейге көтеріл!</p>
         
-        <div class="pass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="color: var(--gold); font-weight: 900; font-size: 20px;">🏆 QANAT PASS</span>
-                <span id="pass-percent" style="font-size: 12px; font-weight: 800;">0%</span>
-            </div>
-            <div class="pass-bar-bg"><div class="pass-progress" id="pass-width"></div></div>
+        <div class="pass-card" 
+     onclick="goTo('pass.html')" 
+     style="width: 95%; 
+            background: #1e293b; 
+            border-radius: 25px; 
+            padding: 40px 22px; /* Жоғары-төменді 40px қылдық, биік болады */
+            margin: 15px auto; 
+            border: 2px solid rgba(255, 204, 21, 0.5); 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; /* Бәрін көлденеңінен ортаға қояды */
+            text-align: center; /* Мәтінді ортаға туралайды */
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;"
+     onmousedown="this.style.transform='scale(0.96)'"
+     onmouseup="this.style.transform='scale(1)'"
+     onmouseleave="this.style.transform='scale(1)'">
+    
+    <div style="color: var(--gold); font-weight: 900; font-size: 24px; letter-spacing: 1px; margin-bottom: 15px; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3);">
+        🏆 QANAT PASS
+    </div>
+
+    <div style="width: 100%; position: relative;">
+        <div id="pass-percent" style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 8px;">0%</div>
+        
+        <div class="pass-bar-bg" style="width: 100%; height: 18px; background: #0f172a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+            <div class="pass-progress" id="pass-width" style="height: 100%; background: linear-gradient(90deg, #facc15, #fbbf24); width: 0%; box-shadow: 0 0 15px var(--gold); transition: 1s ease;"></div>
         </div>
+    </div>
+
+    <div style="margin-top: 15px; font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">
+        Сыйлықтарды ашу үшін басыңыз
+    </div>
+</div>
+        <span id="pass-percent" style="font-size: 12px; font-weight: 800; background: rgba(250, 204, 21, 0.1); padding: 2px 8px; border-radius: 10px; color: var(--gold);">0%</span>
+    </div>
+    
+    <div class="pass-bar-bg">
+        <div class="pass-progress" id="pass-width" style="width: 0%; box-shadow: 0 0 15px var(--gold);"></div>
+    </div>
+    
+    <div style="margin-top: 8px; font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+        Сыйлықтарды алу үшін басыңыз
+    </div>
+</div>
 
         <div class="item-slot" style="margin-top: 25px;">
             <div style="font-size: 35px; margin-right: 20px;">🚀</div>
