@@ -29,27 +29,68 @@
             -webkit-tap-highlight-color: transparent; 
         }
         
-        /* TOP BAR */
-        .top-bar { 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 20px; background: var(--nav-bg); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2); position: fixed; top: 0; width: 100%; z-index: 100; box-sizing: border-box; 
-        }
+        /* Top Bar-ды экранның төбесіне бекіту */
+.top-bar { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    align-items: center !important;
+    padding: 0 15px !important; 
+    background: #111827 !important; /* Қара-көк фон */
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100% !important; 
+    height: 60px !important; 
+    z-index: 9999 !important; 
+    box-sizing: border-box !important;
+}
 
-        .profile-btn {
-            display: flex; align-items: center; gap: 8px; background: var(--card);
-            padding: 6px 14px; border: 2px solid var(--primary); border-radius: 25px;
-            cursor: pointer; font-weight: 800; font-size: 13px; transition: 0.3s;
-        }
-        
-        .mini-avatar {
-            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: var(--primary);
-            display: flex; align-items: center; justify-content: center; font-size: 12px; overflow: hidden;
-        }
-        .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
+/* Gems және Energy блоктарының стильдері */
+.gem-badge, .energy-badge {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 4px 12px !important;
+    border-radius: 20px !important;
+    height: 32px !important;
+    min-width: 60px !important;
+}
 
-        .xp-badge { background: linear-gradient(45deg, var(--primary), #0ea5e9); padding: 7px 18px; border-radius: 20px; font-weight: 900; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
+/* Жасыл (Gems) */
+.gem-badge {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 1.5px solid #10b981 !important;
+    color: #10b981 !important;
+}
 
+/* Көк (Energy) */
+.energy-badge {
+    background: rgba(56, 189, 248, 0.1) !important;
+    border: 1.5px solid #38bdf8 !important;
+    color: #38bdf8 !important;
+}
+
+/* ИКОНКАЛАРДЫҢ ӨЛШЕМІН ҚАТАҢ БЕКІТУ (Осы жер маңызды) */
+.top-bar img {
+    width: 18px !important; 
+    height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 !important;
+}
+
+/* Сандардың шрифті */
+#gem-count, #xp-count {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    line-height: 1 !important;
+}
         .page { display: none; height: 100vh; padding: 90px 20px 120px 20px; overflow-y: auto; flex-direction: column; align-items: center; box-sizing: border-box; width: 100%; }
         .active { display: flex; }
 
@@ -115,12 +156,18 @@
 <body>
 
     <div class="top-bar">
-        <div class="profile-btn" onclick="nav('profile', this)">
-            <div id="u-mini-avatar" class="mini-avatar">👤</div>
-            <span id="u-top-name">Жүктелуде...</span>
-        </div>
-        <div class="xp-badge">⚡ <span id="xp-count">0</span> XP</div>
+    <div class="gem-badge">
+        <img src="https://cdn-icons-png.flaticon.com/128/1828/1828884.png" class="gem-icon">
+        <span id="gem-count">0</span>
     </div>
+
+    <div class="energy-badge">
+        <img src="https://cdn-icons-png.flaticon.com/128/222/222506.png" class="energy-icon">
+        <span id="xp-count">0</span>
+    </div>
+</div>
+
+
 
     <div id="p-main" class="page active">
         <div id="u-home-avatar" class="avatar-circle">👤</div>
