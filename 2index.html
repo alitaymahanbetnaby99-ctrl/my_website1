@@ -301,13 +301,25 @@
 
             // Мәліметтерді тарту
             let { data, error } = await supabaseClient.from('users').select('*').eq('idd', user.id).single();
-            
-            if (data) { 
-                userData = data; 
-            } else {
-                // Жаңа юзер болса базаға қосу (Опционалды)
-                console.log("Юзер табылмады");
-            }
+           // ЖАҢА КОДТЫ ОСЫ ЖЕРГЕ ҚОЙ
+if (data) { 
+    userData = data; 
+} else {
+    // Егер юзер базада жоқ болса, оны автоматты түрде тіркейміз
+    const { data: newUser, error: insertError } = await supabaseClient
+        .from('users')
+        .insert([{ 
+            idd: user.id, 
+            username: user.first_name || "Coder", 
+            xp: 0, 
+            league: 'Bronze' 
+        }])
+        .select()
+        .single();
+    
+    if (insertError) console.error("Тіркеу қатесі:", insertError);
+    if (newUser) userData = newUser;
+}ыыы
             updateUI();
         }
 
