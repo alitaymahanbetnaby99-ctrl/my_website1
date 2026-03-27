@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тараулар - QANAT IT-Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #111827;
+            --card: #1e293b;
+            --primary: #38bdf8;
+            /* Қоңыр түс */
+            --brown: #5d4037; 
+        }
+
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Montserrat', sans-serif; 
+            padding: 20px 15px 100px 15px;
+            box-sizing: border-box;
+        }
+
+        /* АРТҚА БАТЫРМАСЫНЫҢ СТИЛІ */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            background: var(--brown);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-btn:active { transform: scale(0.95); opacity: 0.8; }
+
+        h2 { font-weight: 900; color: var(--primary); margin-bottom: 25px; }
+
+        /* ТАРАУЛАР КАРТОЧКАСЫ (Суреттегідей стиль) */
+        .category-card {
+            width: 100%; 
+            background: #1e293b; 
+            border-radius: 15px; 
+            margin-bottom: 12px; 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            border-left: 6px solid var(--primary);
+            cursor: pointer;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .category-icon { width: 50px; height: 50px; margin-right: 15px; flex-shrink: 0; }
+        .category-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
+        .category-info h3 { margin: 0; font-size: 18px; font-weight: 800; }
+        .category-info p { margin: 4px 0 0 0; font-size: 13px; color: #94a3b8; font-weight: 400; }
+
+        /* ТАҚЫРЫПШАЛАР БӨЛІМІ (Accordion) */
+        .sub-topics {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #161e2d;
+            border-radius: 0 0 15px 15px;
+            margin-top: -12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .sub-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .sub-item:last-child { border-bottom: none; }
+        .sub-item span { color: #94a3b8; font-size: 12px; }
+
+        /* АШЫЛҒАН КЕЗДЕГІ СТИЛЬ */
+        .active-card { border-radius: 15px 15px 0 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .show { max-height: 1000px; }
+    </style>
+</head>
+<body>
+
+  <a href="2index.html" class="back-btn">
+    <img src="https://cdn-icons-png.flaticon.com/128/10405/10405645.png" 
+         style="width: 16px; height: 16px; margin-right: 6px; vertical-align: middle; filter: invert(1);">
+    Артқа
+</a>
+
+    <h2> Тарауды таңдаңыз</h2>
+
+    <div class="category-card" style="border-left-color: #ef4444;" onclick="toggleTopic('alt', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/11093/11093658.png"></div>
+        <div class="category-info">
+            <h3>БӨЛІМ-1</h3>
+            <p>МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ</p>
+        </div>
+    </div>
+    <div id="alt" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(1)">[1.1] С<span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #3b82f6;" onclick="toggleTopic('jet', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/11093/11093658.png"></div>
+        <div class="category-info">
+            <h3>БӨЛІМ-2</h3>
+            <p>МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ</p>
+        </div>
+    </div>
+    <div id="jet" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(4)">[2.1] А <span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #3b82f6;" onclick="toggleTopic('seg', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/11093/11093658.png"></div>
+        <div class="category-info">
+            <h3>БӨЛІМ-3</h3>
+            <p>МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ</p>
+        </div>
+    </div>
+    <div id="seg" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(4)">[3.1] Л <span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #22c55e;" onclick="toggleTopic('tog', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/11093/11093658.png"></div>
+        <div class="category-info">
+            <h3>БӨЛІМ-4</h3>
+            <p>МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ</p>
+        </div>
+    </div>
+    <div id="tog" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(9)">[5.1] E<span>▶</span></div>
+    </div>
+
+    <div class="category-card" style="border-left-color: #f97316;" onclick="toggleTopic('on', this)">
+        <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/11093/11093658.png"></div>
+        <div class="category-info">
+            <h3>БӨЛІМ-5</h3>
+            <p>МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ</p>
+        </div>
+    </div>
+    <div id="on" class="sub-topics">
+        <div class="sub-item" onclick="startQuiz(11)">[6.1] H <span>▶</span></div>
+    </div>
+    <script>
+        // Тарауды басқанда тақырыпшаларды ашу
+        function toggleTopic(id, card) {
+            const panel = document.getElementById(id);
+            const allPanels = document.querySelectorAll('.sub-topics');
+            const allCards = document.querySelectorAll('.category-card');
+
+            // Басқа ашық тұрғандарды жабу
+            allPanels.forEach(p => {
+                if (p.id !== id) p.classList.remove('show');
+            });
+            allCards.forEach(c => {
+                if (c !== card) c.classList.remove('active-card');
+            });
+
+            // Таңдалғанды ашу/жабу
+            panel.classList.toggle('show');
+            card.classList.toggle('active-card');
+            
+            // Вибрация (Haptic)
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // Тақырыпшаны басқанда тестті бастау
+        function startQuiz(subId) {
+            console.log("Тақырыпша ID басылды: " + subId);
+            // Болашақта осы жерге тест бетіне өту кодын жазасың
+            // window.location.href = 'test.html?id=' + subId;
+        }
+    </script>
+</body>
+</html>
