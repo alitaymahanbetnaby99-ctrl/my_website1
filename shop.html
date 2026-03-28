@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QANAT Shop | Premium Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #38bdf8;
+            --gold: #facc15;
+            --diamond: #0ea5e9;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            padding: 90px 20px 120px 20px;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 20px; background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2); position: fixed; 
+            top: 0; left: 0; width: 100%; z-index: 100; box-sizing: border-box;
+        }
+
+        .balance-container { display: flex; gap: 8px; }
+        
+        /* МОНЕТА МЕН АЛМАЗ БЛОГЫ */
+        .coin-box {
+            background: rgba(15, 23, 42, 0.8); 
+            padding: 6px 12px; 
+            border-radius: 15px;
+            font-weight: 900; 
+            font-size: 14px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .currency-icon { width: 18px; height: 18px; object-fit: contain; }
+
+        .section-header {
+            margin: 30px 0 20px; font-weight: 900; font-size: 16px;
+            display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase; color: var(--primary);
+        }
+
+        .shop-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+
+        /* ITEM CARD + BLUE GLOW */
+        .item-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; align-items: center;
+            box-sizing: border-box;
+        }
+
+        .item-card:hover, .item-card:active {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .item-img {
+            width: 75px; height: 75px; object-fit: contain;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+        }
+
+        .item-name { font-weight: 800; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; }
+        
+        .price-tag {
+            display: flex; align-items: center; gap: 4px;
+            font-weight: 900; font-size: 15px; margin-bottom: 12px;
+        }
+
+        .buy-btn {
+            width: 100%; padding: 12px; border: none; border-radius: 14px;
+            font-weight: 900; font-size: 11px; cursor: pointer; color: white;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        }
+
+        .diamond-btn { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
+
+        .back-nav { 
+            position: fixed; bottom: 30px; left: 0; width: 100%; 
+            display: flex; justify-content: center; z-index: 100;
+        }
+        
+        .back-btn { 
+            background: #1e293b; color: white; padding: 15px 40px; 
+            border-radius: 20px; text-decoration: none; font-weight: 800;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div style="font-weight: 900; font-size: 18px; color: var(--primary);">STORE 🛒</div>
+        <div class="balance-container">
+            <div class="coin-box" style="color: var(--gold);">
+                <img src="https://cdn-icons-png.flaticon.com/128/1490/1490900.png" class="currency-icon">
+                <span id="gold-bal">2500</span>
+            </div>
+            <div class="coin-box" style="color: var(--diamond);">
+                <img src="https://cdn-icons-png.flaticon.com/128/2345/2345161.png" class="currency-icon">
+                <span id="diam-bal">120</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">📦 Кейстер</div>
+    <div class="shop-grid">
+        <div class="item-card">
+            <img src="https://cdn-icons-png.flaticon.com/128/679/679821.png" class="item-img">
+            <div class="item-name">Mythic Case</div>
+            <div class="price-tag" style="color: var(--gold);">500 </div>
+            <button class="buy-btn" onclick="buy('Mythic', 500, 'gold')">САТЫП АЛУ</button>
+        </div>
+        <div class="item-card">
+            <img src="https://cdn-icons-png.flaticon.com/128/4221/4221419.png" class="item-img">
+            <div class="item-name">Legend Box</div>
+            <div class="price-tag" style="color: var(--gold);">250 </div>
+            <button class="buy-btn" onclick="buy('Legend', 250, 'gold')">САТЫП АЛУ</button>
+        </div>
+    </div>
+
+    <div class="section-header">💎 Алмаз Айырбастау</div>
+    <div class="shop-grid">
+        <div class="item-card">
+            <img src="https://cdn-icons-png.flaticon.com/128/11260/11260341.png" class="item-img">
+            <div class="item-name">10 Diamonds</div>
+            <div class="price-tag" style="color: var(--gold);">1000 </div>
+            <button class="buy-btn" onclick="buy('10D', 1000, 'gold')">АЙЫРБАСТАУ</button>
+        </div>
+        <div class="item-card">
+            <img src="https://cdn-icons-png.flaticon.com/128/9431/9431140.png" class="item-img">
+            <div class="item-name">50 Diamonds</div>
+            <div class="price-tag" style="color: var(--gold);">4500 </div>
+            <button class="buy-btn" onclick="buy('50D', 4500, 'gold')">АЙЫРБАСТАУ</button>
+        </div>
+    </div>
+
+    <div class="back-nav">
+        <a href="2index.html" class="back-btn" onclick="vibrate()">← АРТҚА ҚАЙТУ</a>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        let stats = JSON.parse(localStorage.getItem('userStats')) || { gold: 2500, diam: 120, inventory: [] };
+
+        function updateDisplay() {
+            document.getElementById('gold-bal').innerText = stats.gold;
+            document.getElementById('diam-bal').innerText = stats.diam;
+            localStorage.setItem('userStats', JSON.stringify(stats));
+        }
+
+        function buy(name, price, type) {
+            if (stats[type] >= price) {
+                stats[type] -= price;
+                stats.inventory.push(name);
+                tg.HapticFeedback.notificationOccurred('success');
+                alert("Сәтті алынды!");
+                updateDisplay();
+            } else {
+                tg.HapticFeedback.notificationOccurred('error');
+                alert("Қаражат жеткіліксіз!");
+            }
+        }
+
+        function vibrate() { tg.HapticFeedback.impactOccurred('medium'); }
+        updateDisplay();
+    </script>
+</body>
+</html>
