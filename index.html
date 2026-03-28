@@ -107,12 +107,12 @@
     <div class="category-card" style="border-left-color: #ef4444;" onclick="toggleTopic('num-sys', this)">
         <div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/128/2996/2996284.png"></div>
         <div class="category-info">
-            <h3>Есептеу жүйелері</h3>
+            <h3>Есептеу жүйелері</h3>s
             <p>Екілік, сегіздік, он алтылық</p>
         </div>
     </div>
     <div id="num-sys" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(1)">[1.1] Санау жүйелері <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(1.1)">[1.1] Санау жүйелері <span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(2)">[1.2] 10-дықтан 2,8,16 жүйеге айналдыру <span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(3)">[1.3] 2,8,16 жүйені өзара айналдыру<span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(3)">[1.4] Бүтін емес санау жүйесі <span>▶</span></div>
@@ -225,7 +225,7 @@
         </div>
     </div>
     <div id="teor" class="sub-topics">
-        <div class="sub-item" onclick="startQuiz(13)">[8.1] Компьютер жадысы <span>▶</span></div>
+        <div class="sub-item" onclick="startQuiz(1.1)">[8.1] Компьютер жадысы <span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(14)">[8.2] Компьютердің ішкі құрылымы <span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(14)">[8.3] Программалық және Аппараттық жасақтамалар <span>▶</span></div>
         <div class="sub-item" onclick="startQuiz(14)">[8.4] Компьютердің негізгі құрылғылары <span>▶</span></div>
@@ -273,6 +273,7 @@
             console.log("Тақырыпша ID басылды: " + subId);
             // Болашақта осы жерге тест бетіне өту кодын жазасың
             // window.location.href = 'test.html?id=' + subId;
+            window.location.href = `math.html?topic=${subId}`;
         }
     </script>
 </body>
