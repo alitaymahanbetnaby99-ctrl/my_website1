@@ -81,7 +81,22 @@
         }
 
         
+         /* Белсенді (қазіргі) сұрақтың астына сызық немесе ерекше жиек қосу */
+       .q-step.active {
+           border: 2px solid var(--primary) !important;
+           box-shadow: 0 0 10px var(--primary);
+           transform: scale(1.15);
+        }
 
+        /* Жауап берілген, бірақ қазір ол сұрақта тұрған жоқ болса */
+       .q-step.answered {
+           opacity: 0.8;
+        }
+
+        /* Егер жауап берілмеген сұрақта тұрса */
+        .q-step:not(.correct):not(.wrong).active {
+             background: #334155;
+        }
         .q-step.active { border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
         .q-step.correct { background: var(--green); color: white; border: none; }
         .q-step.wrong { background: var(--red); color: white; border: none; }
