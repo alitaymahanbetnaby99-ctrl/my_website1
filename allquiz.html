@@ -257,7 +257,7 @@
             "1.2": {
                 name: "Санау жүйелері 2-бөлім",
                 questions: [
-                    { q: "1.2 Тақырыбының 1-сұрағы?", a: ["Жауап 1", "Жауап 2", "Жауап 3", "Жауап 4"], c: 0 }
+                    { q: "1-сұрақ?", a: ["Жауап 1", "Жауап 2", "Жауап 3", "Жауап 4"], c: 0 }
                 ]
             },
             "1.3": { name: "Компьютер құрылғылары", questions: [] },
@@ -271,7 +271,7 @@
 
         // --- 2. ДИНАМИКАЛЫҚ ЖҮКТЕУ ЛОГИКАСЫ ---
         const urlParams = new URLSearchParams(window.location.search);
-        const topicKey = urlParams.get('topic') || "1.1"; // Егер URL-де жоқ болса, 1.1 ашылады
+        const topicKey = urlParams.get('topic') || "1.2"; // Егер URL-де жоқ болса, 1.1 ашылады
         
         const currentLesson = allLessons[topicKey] || allLessons["1.1"];
         let questions = currentLesson.questions;
